@@ -1,3 +1,6 @@
+'use client';
+
+import { useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import Header from '@/components/layout/Header';
@@ -6,8 +9,96 @@ import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
 import Hero from '@/components/sections/Hero';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export default function Home() {
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const featuredExperiences = [
+    {
+      id: 'mini-cabin',
+      title: 'Mini Cabin Suite',
+      price: 'From 2350 LKR',
+      capacity: 'Max 3 pax',
+      glow: 'purple' as const,
+      badgeVariant: 'primary' as const,
+      image: '/image-from-rawpixel-id-12136149-jpeg.jpg',
+      description: 'Perfect for intimate entertainment sessions with FHD projection, 5.1 surround sound, and standard Netflix/YouTube streaming.'
+    },
+    {
+      id: 'elite-silver',
+      title: 'Elite Silver Suite',
+      price: 'From 2550 LKR',
+      capacity: 'Max 4 pax',
+      glow: 'cyan' as const,
+      badgeVariant: 'secondary' as const,
+      image: '/image-from-rawpixel-id-14510238-jpeg.jpg',
+      description: 'Enhanced screen size and audio fidelity for a cinematic experience.'
+    },
+    {
+      id: 'gold',
+      title: 'Gold VIP Cabin',
+      price: 'From 3000 LKR',
+      capacity: 'Max 4 pax',
+      glow: 'purple' as const,
+      badgeVariant: 'tertiary' as const,
+      image: '/image-from-rawpixel-id-15201674-jpeg.jpg',
+      description: 'Premium comfort with a fully air-conditioned cabin, 4K projector, 7.1 audio sound system, and reclining seating.'
+    },
+    {
+      id: 'platinum',
+      title: 'Platinum Gamer Suite',
+      price: 'From 3450 LKR',
+      capacity: 'Max 4 pax',
+      glow: 'cyan' as const,
+      badgeVariant: 'primary' as const,
+      image: '/image-from-rawpixel-id-12136149-jpeg.jpg',
+      description: 'High-performance console gaming setup coupled with cinematic movie streams.'
+    },
+    {
+      id: 'royal',
+      title: 'Royal VIP Suite',
+      price: 'From 5300 LKR',
+      capacity: 'Max 6 pax',
+      glow: 'purple' as const,
+      badgeVariant: 'secondary' as const,
+      image: '/image-from-rawpixel-id-14510238-jpeg.jpg',
+      description: 'Generous suite size designed for larger family viewings or group co-op gaming.'
+    },
+    {
+      id: 'lite-celebration',
+      title: 'Lite Celebration Package',
+      price: 'From 6250 LKR',
+      capacity: 'Max 6 pax',
+      glow: 'cyan' as const,
+      badgeVariant: 'tertiary' as const,
+      image: '/image-from-rawpixel-id-15201674-jpeg.jpg',
+      description: 'Ideal package for hosting surprise birthday parties or small milestones.'
+    },
+    {
+      id: 'grand-celebration',
+      title: 'Grand Celebration Package',
+      price: 'From 8950 LKR',
+      capacity: 'Max 8 pax',
+      glow: 'purple' as const,
+      badgeVariant: 'primary' as const,
+      image: '/image-from-rawpixel-id-15201674-jpeg.jpg',
+      description: 'The ultimate private event package, including ambient party decorations, a pro-grade karaoke setup, PS5 gaming, and a massive screen.'
+    }
+  ];
+
+  const handleScroll = (direction: 'left' | 'right') => {
+    if (scrollRef.current) {
+      const { scrollLeft } = scrollRef.current;
+      const card = scrollRef.current.firstElementChild as HTMLElement;
+      const cardWidth = card ? card.offsetWidth + 24 : 374; // exact card width + gap (24px)
+      const scrollTo = direction === 'left' 
+        ? scrollLeft - cardWidth 
+        : scrollLeft + cardWidth;
+      scrollRef.current.scrollTo({ left: scrollTo, behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="flex flex-col min-h-screen bg-background text-on-background">
       <Header />
@@ -17,92 +108,78 @@ export default function Home() {
         <Hero />
 
         {/* Featured Experiences */}
-        <section className="py-24 px-5 md:px-[80px] max-w-[1440px] mx-auto z-10 relative">
-          <div className="text-center mb-20">
-            <Badge variant="primary" className="mb-4">Premium Offerings</Badge>
-            <h2 className="font-sans text-[36px] md:text-[50px] font-bold text-white mb-4 tracking-tight">
-              Curated Private Entertainment
-            </h2>
-            <p className="font-body text-[16px] sm:text-[18px] text-on-surface-variant max-w-2xl mx-auto leading-relaxed">
-              Explore custom private suites featuring high-end projector systems, surround sound setups, and elite gaming zones.
-            </p>
+        <section className="py-24 px-5 md:px-[80px] max-w-[1440px] mx-auto z-10 relative overflow-hidden">
+          {/* Header Row */}
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+            <div>
+              <Badge variant="primary" className="mb-4">Premium Offerings</Badge>
+              <h2 className="font-sans text-[36px] md:text-[50px] font-bold text-white tracking-tight leading-[1.1]">
+                Curated Private Entertainment
+              </h2>
+              <p className="font-body text-[16px] sm:text-[18px] text-on-surface-variant max-w-2xl mt-3 leading-relaxed">
+                Explore custom private suites featuring high-end projector systems, surround sound setups, and elite gaming zones.
+              </p>
+            </div>
+            
+            {/* Scroll Buttons */}
+            <div className="flex items-center space-x-3 self-start md:self-auto shrink-0">
+              <button 
+                onClick={() => handleScroll('left')}
+                className="w-12 h-12 rounded-full border border-glass-stroke flex items-center justify-center text-white hover:bg-white/5 transition-all cursor-pointer"
+                aria-label="Scroll left"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <button 
+                onClick={() => handleScroll('right')}
+                className="w-12 h-12 rounded-full border border-glass-stroke flex items-center justify-center text-white hover:bg-white/5 transition-all cursor-pointer"
+                aria-label="Scroll right"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <Card glowColor="purple" className="group p-5">
-              <div className="relative h-64 mb-6 overflow-hidden rounded-xl">
-                <Image
-                  src="/image-from-rawpixel-id-12136149-jpeg.jpg"
-                  alt="Mini Cabin"
-                  fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-              </div>
-              <div className="flex items-center justify-between mb-4">
-                <Badge variant="primary">From 2350 LKR</Badge>
-                <span className="font-mono text-xs text-on-surface-variant">Max 3 pax</span>
-              </div>
-              <h3 className="font-sans text-[22px] font-bold text-white mb-2 group-hover:text-primary transition-colors">
-                Mini Cabin
-              </h3>
-              <p className="font-body text-[15px] text-on-surface-variant mb-6 leading-relaxed">
-                Perfect for intimate entertainment sessions with FHD projection, 5.1 surround sound, and standard Netflix/YouTube streaming.
-              </p>
-              <Link href="/booking">
-                <Button variant="secondary" className="w-full">Explore & Book</Button>
-              </Link>
-            </Card>
-
-            <Card glowColor="cyan" className="group p-5">
-              <div className="relative h-64 mb-6 overflow-hidden rounded-xl">
-                <Image
-                  src="/image-from-rawpixel-id-14510238-jpeg.jpg"
-                  alt="Gold Package"
-                  fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-              </div>
-              <div className="flex items-center justify-between mb-4">
-                <Badge variant="tertiary">From 3000 LKR</Badge>
-                <span className="font-mono text-xs text-on-surface-variant">Max 4 pax</span>
-              </div>
-              <h3 className="font-sans text-[22px] font-bold text-white mb-2 group-hover:text-tertiary transition-colors">
-                Gold Package
-              </h3>
-              <p className="font-body text-[15px] text-on-surface-variant mb-6 leading-relaxed">
-                Premium comfort with a fully air-conditioned cabin, 4K projector, 7.1 audio sound system, and reclining seating.
-              </p>
-              <Link href="/booking">
-                <Button variant="secondary" className="w-full">Explore & Book</Button>
-              </Link>
-            </Card>
-
-            <Card glowColor="purple" className="group p-5">
-              <div className="relative h-64 mb-6 overflow-hidden rounded-xl">
-                <Image
-                  src="/image-from-rawpixel-id-15201674-jpeg.jpg"
-                  alt="Grand Celebration"
-                  fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-              </div>
-              <div className="flex items-center justify-between mb-4">
-                <Badge variant="secondary">From 8950 LKR</Badge>
-                <span className="font-mono text-xs text-on-surface-variant">Max 8 pax</span>
-              </div>
-              <h3 className="font-sans text-[22px] font-bold text-white mb-2 group-hover:text-primary transition-colors">
-                Grand Celebration
-              </h3>
-              <p className="font-body text-[15px] text-on-surface-variant mb-6 leading-relaxed">
-                The ultimate private event package, including ambient party decorations, a pro-grade karaoke setup, PS4 gaming, and a massive screen.
-              </p>
-              <Link href="/booking">
-                <Button variant="secondary" className="w-full">Explore & Book</Button>
-              </Link>
-            </Card>
+          {/* Carousel Slider */}
+          <div 
+            ref={scrollRef}
+            className="flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-8 -mx-5 px-5 md:-mx-[80px] md:px-[80px] select-none scrollbar-none"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          >
+            {featuredExperiences.map((exp) => (
+              <Card 
+                key={exp.id} 
+                glowColor={exp.glow} 
+                className="group p-5 snap-start shrink-0 w-[290px] sm:w-[340px] lg:w-[calc((100%-48px)/3)] flex flex-col"
+              >
+                <div className="relative h-56 mb-5 overflow-hidden rounded-xl bg-surface-base">
+                  <Image
+                    src={exp.image}
+                    alt={exp.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 350px"
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+                
+                <div className="flex items-center justify-between mb-4">
+                  <Badge variant={exp.badgeVariant}>{exp.price}</Badge>
+                  <span className="font-mono text-xs text-on-surface-variant font-semibold">{exp.capacity}</span>
+                </div>
+                
+                <h3 className="font-sans text-[20px] font-bold text-white mb-2 group-hover:text-primary transition-colors">
+                  {exp.title}
+                </h3>
+                
+                <p className="font-body text-[14px] text-on-surface-variant mb-6 leading-relaxed flex-grow line-clamp-3">
+                  {exp.description}
+                </p>
+                
+                <Link href={`/booking/${exp.id}`}>
+                  <Button variant="secondary" className="w-full mt-auto">Explore & Book</Button>
+                </Link>
+              </Card>
+            ))}
           </div>
         </section>
 

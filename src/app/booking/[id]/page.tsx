@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, Suspense } from 'react';
+import { useState, useEffect, Suspense, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -19,6 +19,7 @@ function BookingFormContent() {
   const params = useParams();
   const router = useRouter();
   const experienceId = params.id as string;
+  const slotsRef = useRef<HTMLDivElement>(null);
   
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
@@ -132,7 +133,7 @@ function BookingFormContent() {
 
   // Persisted countdown timer management
   useEffect(() => {
-    if (!formData.date || !formData.time || step === 4) {
+    if (step === 4) {
       setTimeLeft(null);
       return;
     }
@@ -257,6 +258,12 @@ I have attached the screenshot of the bank transfer transaction receipt below. P
   const selectDate = (day: number) => {
     const dateStr = `${currentYear}-${(currentMonth + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
     setFormData({ ...formData, date: dateStr, time: '' });
+    
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+      setTimeout(() => {
+        slotsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    }
   };
 
   // Render Calendar squares
@@ -344,11 +351,11 @@ I have attached the screenshot of the bank transfer transaction receipt below. P
           </div>
 
           {/* Persistent Hold Timer banner */}
-          {timeLeft !== null && (
+          {timeLeft !== null && timeLeft > 0 && (
             <div className="max-w-md mx-auto bg-primary/10 border border-primary/25 rounded-xl px-4 py-3 flex items-center justify-center gap-3.5 mb-8 animate-pulse">
               <Clock className="w-5 h-5 text-primary" />
               <div className="text-sm font-medium text-white flex items-center gap-1.5">
-                <span>Slot reserved:</span>
+                <span>Hold reservation time:</span>
                 <span className="font-mono text-primary font-bold text-base">{formatTimeLeft(timeLeft)}</span>
               </div>
             </div>
@@ -460,7 +467,7 @@ I have attached the screenshot of the bank transfer transaction receipt below. P
                 </div>
 
                 {/* Time Slots Column */}
-                <div className="lg:col-span-5 flex flex-col">
+                <div ref={slotsRef} className="lg:col-span-5 flex flex-col scroll-mt-24">
                   <Card className="p-6 border border-glass-stroke flex-1">
                     <h3 className="font-sans text-xl font-bold text-white mb-2">Available Slots</h3>
                     <p className="font-body text-xs text-on-surface-variant mb-6">
@@ -557,7 +564,7 @@ I have attached the screenshot of the bank transfer transaction receipt below. P
                         type="text"
                         required
                         placeholder="John Doe"
-                        className="w-full px-4 py-3 bg-background border border-glass-stroke rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/60 transition-all placeholder:text-muted/50"
+                        className="w-full px-4 py-3 bg-background border border-glass-stroke rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/60 transition-all placeholder:text-muted/50 text-[16px] md:text-sm"
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       />
@@ -570,7 +577,7 @@ I have attached the screenshot of the bank transfer transaction receipt below. P
                         type="email"
                         required
                         placeholder="johndoe@example.com"
-                        className="w-full px-4 py-3 bg-background border border-glass-stroke rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/60 transition-all placeholder:text-muted/50"
+                        className="w-full px-4 py-3 bg-background border border-glass-stroke rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/60 transition-all placeholder:text-muted/50 text-[16px] md:text-sm"
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       />
@@ -583,7 +590,7 @@ I have attached the screenshot of the bank transfer transaction receipt below. P
                         type="tel"
                         required
                         placeholder="+94 7X XXX XXXX"
-                        className="w-full px-4 py-3 bg-background border border-glass-stroke rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/60 transition-all placeholder:text-muted/50"
+                        className="w-full px-4 py-3 bg-background border border-glass-stroke rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/60 transition-all placeholder:text-muted/50 text-[16px] md:text-sm"
                         value={formData.phone}
                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                       />
@@ -594,7 +601,7 @@ I have attached the screenshot of the bank transfer transaction receipt below. P
                       </label>
                       <textarea
                         placeholder="Any movie request, celebration instructions, balloon color theme..."
-                        className="w-full px-4 py-3 bg-background border border-glass-stroke rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/60 transition-all h-24 placeholder:text-muted/50 resize-none"
+                        className="w-full px-4 py-3 bg-background border border-glass-stroke rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/60 transition-all h-24 placeholder:text-muted/50 resize-none text-[16px] md:text-sm"
                         value={formData.notes}
                         onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                       />

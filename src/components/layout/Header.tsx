@@ -22,17 +22,8 @@ export default function Header() {
   return (
     <header className="fixed top-0 w-full z-50 bg-background/50 backdrop-blur-xl border-b border-glass-stroke">
       <nav className="flex justify-between items-center w-full px-[20px] md:px-[80px] max-w-[1440px] mx-auto h-20">
-        <Link href="/" className="font-sans text-[22px] font-extrabold tracking-tight text-white hover:text-primary transition-colors flex items-center gap-2.5 group">
-          <div className="relative w-9 h-9 overflow-hidden rounded-full border border-glass-stroke shadow-md shrink-0 group-hover:scale-105 transition-transform duration-300">
-            <Image
-              src="/logo-r.png"
-              alt="NAXORA Logo"
-              fill
-              sizes="36px"
-              className="object-cover"
-            />
-          </div>
-          <span className="bg-gradient-to-r from-primary to-tertiary bg-clip-text text-transparent font-extrabold tracking-tighter">NAXORA</span>
+        <Link href="/" className="font-sans text-[24px] font-extrabold tracking-tighter text-white hover:text-primary transition-colors flex items-center gap-2">
+          <span className="bg-gradient-to-r from-primary to-tertiary bg-clip-text text-transparent font-extrabold">NAXORA</span>
         </Link>
 
         {/* Desktop Menu */}
@@ -43,7 +34,7 @@ export default function Header() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`font-sans text-[15px] font-semibold transition-all py-2 relative tracking-wide uppercase text-xs ${
+                className={`font-sans text-[15px] font-semibold transition-all py-2 relative tracking-wide uppercase ${
                   isActive ? 'text-primary' : 'text-on-surface-variant hover:text-primary'
                 }`}
               >
