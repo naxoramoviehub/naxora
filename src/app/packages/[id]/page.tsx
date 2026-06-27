@@ -821,9 +821,16 @@ I have attached the screenshot of the bank transfer transaction receipt below. P
                         <Check className="w-6 h-6 animate-pulse" />
                       </div>
                       <h5 className="font-sans text-[15px] font-bold text-white mb-1">Receipt Submitted Successfully!</h5>
-                      <p className="font-body text-xs text-on-surface-variant mb-4">
+                      <p className="font-body text-xs text-on-surface-variant mb-3">
                         Thank you! Our coordinators will verify the payment and confirm your slot.
                       </p>
+                      <div className="flex items-start gap-2 bg-blue-500/10 border border-blue-500/20 rounded-lg px-3 py-2 mb-3 text-left">
+                        <span className="text-blue-400 text-sm mt-0.5">&#9993;</span>
+                        <p className="font-body text-[11px] text-blue-300 leading-relaxed">
+                          A confirmation email will be sent to your inbox once approved.
+                          If not received, please <strong className="text-blue-200">check your spam folder</strong>.
+                        </p>
+                      </div>
                       {receiptPreview && (
                         <div className="max-w-[200px] rounded border border-glass-stroke overflow-hidden mb-2">
                           <img src={receiptPreview} alt="Receipt Thumbnail" className="w-full h-auto object-cover max-h-[150px]" />
@@ -887,18 +894,32 @@ I have attached the screenshot of the bank transfer transaction receipt below. P
                 </div>
 
                 {/* Action buttons */}
-                <div className="flex flex-col sm:flex-row gap-4 justify-center border-t border-glass-stroke pt-6">
-                  <Link href="/">
-                    <Button variant="secondary" className="w-full sm:w-auto">Return Home</Button>
-                  </Link>
-                  <Button 
-                    variant="primary" 
-                    className="w-full sm:w-auto flex items-center justify-center gap-2"
-                    onClick={triggerWhatsApp}
-                  >
-                    <MessageSquare className="w-5 h-5 fill-current" />
-                    <span>Upload Receipt via WhatsApp</span>
-                  </Button>
+                <div className="flex flex-col gap-4 justify-center border-t border-glass-stroke pt-6">
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                    <Link href="/">
+                      <Button variant="secondary" className="w-full sm:w-auto">Return Home</Button>
+                    </Link>
+                    <Button 
+                      variant="primary" 
+                      className="w-full sm:w-auto flex items-center justify-center gap-2"
+                      onClick={triggerWhatsApp}
+                    >
+                      <MessageSquare className="w-5 h-5 fill-current" />
+                      <span>Upload Receipt via WhatsApp</span>
+                    </Button>
+                  </div>
+
+                  {/* Email confirmation notice */}
+                  <div className="flex items-start gap-3 bg-primary/5 border border-primary/15 rounded-xl px-4 py-3 text-left">
+                    <span className="text-primary text-base shrink-0 mt-0.5">&#9993;</span>
+                    <div>
+                      <p className="font-sans text-[12px] font-semibold text-white mb-0.5">Confirmation email on its way</p>
+                      <p className="font-body text-[11px] text-on-surface-variant leading-relaxed">
+                        Once our team verifies your payment, a booking confirmation with your invoice will be sent to <strong className="text-white">{formData.email || 'your email'}</strong>.
+                        If it doesn&apos;t arrive, please <strong className="text-primary">check your spam or junk folder</strong>.
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </Card>
             </div>

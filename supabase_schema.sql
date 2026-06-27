@@ -61,9 +61,6 @@ ALTER TABLE public.bookings ADD COLUMN IF NOT EXISTS booking_time_display TEXT D
 ALTER TABLE public.bookings ADD COLUMN IF NOT EXISTS receipt_filename TEXT DEFAULT '';
 ALTER TABLE public.bookings ADD COLUMN IF NOT EXISTS amount_due TEXT DEFAULT '';
 
--- 4. Sample Seed Data (Optional)
-INSERT INTO public.bookings (id, customer_name, customer_email, customer_phone, experience_id, package_title, booking_date, booking_time, booking_time_display, notes, status, amount_due)
-VALUES
-('NX-8421', 'Dulitha Wijetunge', 'dulitha@example.com', '+94 77 123 4567', 'gold', 'Gold VIP Cabin', CURRENT_DATE, '13:00', '01:00 PM - 04:00 PM', 'Please arrange a birthday cake setup.', 'confirmed', '3000 LKR'),
-('NX-1029', 'Sarah Connor', 'sarah@example.com', '+94 71 987 6543', 'platinum', 'Platinum Gamer Suite', CURRENT_DATE, '20:00', '08:00 PM - 11:00 PM', 'Prefer Xbox controllers if available.', 'pending', '3450 LKR')
-ON CONFLICT (id) DO NOTHING;
+-- ──────────────────────────────────────────────────────────────────────────────
+-- Schema setup complete. No seed data — bookings are created through the app.
+-- ──────────────────────────────────────────────────────────────────────────────

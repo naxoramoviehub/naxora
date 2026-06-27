@@ -34,58 +34,6 @@ function generateBookingId(): string {
   return `NX-${num}`;
 }
 
-// Initial mock bookings for the admin dashboard if localStorage is empty
-const INITIAL_MOCK_BOOKINGS: Booking[] = [
-  {
-    id: 'NX-8421',
-    customer_name: 'Dulitha Wijetunge',
-    customer_email: 'dulitha@example.com',
-    customer_phone: '+94 77 123 4567',
-    experience_id: 'gold',
-    booking_date: new Date().toISOString().split('T')[0], // Today
-    booking_time: '13:00',
-    notes: 'Please arrange a birthday cake setup.',
-    status: 'confirmed',
-    created_at: new Date(Date.now() - 4 * 3600000).toISOString()
-  },
-  {
-    id: 'NX-1029',
-    customer_name: 'Sarah Connor',
-    customer_email: 'sarah@example.com',
-    customer_phone: '+94 71 987 6543',
-    experience_id: 'platinum',
-    booking_date: new Date().toISOString().split('T')[0], // Today
-    booking_time: '20:00',
-    notes: 'Prefer Xbox controllers if available, otherwise PS4 is fine.',
-    status: 'pending',
-    created_at: new Date(Date.now() - 2 * 3600000).toISOString()
-  },
-  {
-    id: 'NX-7732',
-    customer_name: 'Ruwan Perera',
-    customer_email: 'ruwan@example.com',
-    customer_phone: '+94 72 444 5555',
-    experience_id: 'mini-cabin',
-    booking_date: new Date(Date.now() + 86400000).toISOString().split('T')[0], // Tomorrow
-    booking_time: '16:30',
-    notes: '',
-    status: 'confirmed',
-    created_at: new Date(Date.now() - 24 * 3600000).toISOString()
-  },
-  {
-    id: 'NX-4491',
-    customer_name: 'Michelle Fernando',
-    customer_email: 'michelle@example.com',
-    customer_phone: '+94 76 333 4444',
-    experience_id: 'lite-celebration',
-    booking_date: new Date(Date.now() + 172800000).toISOString().split('T')[0], // In 2 days
-    booking_time: '20:00',
-    notes: 'Anniversary celebration setup. Balloon decorations requested.',
-    status: 'pending',
-    created_at: new Date(Date.now() - 12 * 3600000).toISOString()
-  }
-];
-
 export async function getBookings(): Promise<Booking[]> {
   if (supabase) {
     try {
@@ -101,17 +49,12 @@ export async function getBookings(): Promise<Booking[]> {
     }
   }
 
-  // Local Storage fallback
+  // Local Storage fallback (no seed data — returns real bookings only)
   if (typeof window !== 'undefined') {
     const data = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (data) {
-      return JSON.parse(data);
-    } else {
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(INITIAL_MOCK_BOOKINGS));
-      return INITIAL_MOCK_BOOKINGS;
-    }
+    if (data) return JSON.parse(data);
   }
-  return INITIAL_MOCK_BOOKINGS;
+  return [];
 }
 
 export async function getBookingById(id: string): Promise<Booking | null> {
