@@ -2,8 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 
 export async function POST(req: NextRequest) {
+  console.log('[API] /api/confirm-booking hit');
   try {
     const body = await req.json();
+    console.log('[API] /api/confirm-booking payload:', JSON.stringify(body, null, 2));
     const {
       bookingId,
       customerName,
@@ -265,7 +267,7 @@ export async function POST(req: NextRequest) {
                   </tr>
                   <tr>
                     <td style="padding:4px 20px 4px 0;font-size:13px;color:#d1d5db;">&#128231; Email</td>
-                    <td style="padding:4px 0;font-size:13px;"><a href="mailto:naxoramovihub@gmail.com" style="color:#818cf8;text-decoration:none;">naxoramovihub@gmail.com</a></td>
+                    <td style="padding:4px 0;font-size:13px;"><a href="mailto:naxoramoviehub@gmail.com" style="color:#818cf8;text-decoration:none;">naxoramoviehub@gmail.com</a></td>
                   </tr>
                 </table>
               </div>
@@ -303,7 +305,7 @@ export async function POST(req: NextRequest) {
       from: `"NAXORA" <${smtpUser}>`,
       to: customerEmail,
       subject: `✅ Booking Confirmed – ${packageTitle} on ${formattedDate} | ${bookingId}`,
-      text: `Dear ${customerName},\n\nYour booking has been confirmed!\n\nBooking ID: ${bookingId}\nPackage: ${packageTitle}\nDate: ${formattedDate}\nTime: ${bookingTimeDisplay}\nGuests: ${capacity}\nAmount: ${amountDue}\n\nPlease arrive 10 minutes early and bring this confirmation.\n\nNAXORA Team\nWhatsApp: +94 70 773 5599\nEmail: naxoramovihub@gmail.com`,
+      text: `Dear ${customerName},\n\nYour booking has been confirmed!\n\nBooking ID: ${bookingId}\nPackage: ${packageTitle}\nDate: ${formattedDate}\nTime: ${bookingTimeDisplay}\nGuests: ${capacity}\nAmount: ${amountDue}\n\nPlease arrive 10 minutes early and bring this confirmation.\n\nNAXORA Team\nWhatsApp: +94 70 773 5599\nEmail: naxoramoviehub@gmail.com`,
       html: htmlBody,
       attachments,
     });

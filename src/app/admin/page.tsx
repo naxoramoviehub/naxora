@@ -60,12 +60,14 @@ export default function AdminDashboardPage() {
 
   // Send booking confirmation email to customer
   const sendConfirmationEmail = async (booking: Booking) => {
+    console.log('[Admin] Firing sendConfirmationEmail for booking:', booking.id, 'Email:', booking.customer_email);
     const timeDisplay =
       booking.booking_time_display ||
       TIME_SLOTS.find(ts => ts.time === booking.booking_time)?.display ||
       booking.booking_time;
     try {
-      await fetch('/api/confirm-booking', {
+      console.log('[Admin] Calling /api/confirm-booking...');
+      const res = await fetch('/api/confirm-booking', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
