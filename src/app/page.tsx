@@ -42,7 +42,7 @@ export default function Home() {
       capacity: 'Max 4 pax',
       glow: 'purple' as const,
       badgeVariant: 'tertiary' as const,
-      image: '/image-from-rawpixel-id-15201674-jpeg.jpg',
+      image: '/gold_vip_cabin.png',
       description: 'Premium comfort with a fully air-conditioned cabin, 4K projector, 7.1 audio sound system, and reclining seating.'
     },
     {
@@ -72,7 +72,7 @@ export default function Home() {
       capacity: 'Max 6 pax',
       glow: 'cyan' as const,
       badgeVariant: 'tertiary' as const,
-      image: '/image-from-rawpixel-id-15201674-jpeg.jpg',
+      image: '/gold_vip_cabin.png',
       description: 'Ideal package for hosting surprise birthday parties or small milestones.'
     },
     {
@@ -82,7 +82,7 @@ export default function Home() {
       capacity: 'Max 8 pax',
       glow: 'purple' as const,
       badgeVariant: 'primary' as const,
-      image: '/image-from-rawpixel-id-15201674-jpeg.jpg',
+      image: '/gold_vip_cabin.png',
       description: 'The ultimate private event package, including ambient party decorations, a pro-grade karaoke setup, PS5 gaming, and a massive screen.'
     }
   ];
@@ -175,7 +175,7 @@ export default function Home() {
                   {exp.description}
                 </p>
                 
-                <Link href={`/booking/${exp.id}`}>
+                <Link href={`/packages/${exp.id}`}>
                   <Button variant="secondary" className="w-full mt-auto">Explore & Book</Button>
                 </Link>
               </Card>
@@ -193,7 +193,7 @@ export default function Home() {
               Book your slot now and custom-design your private viewing or gaming session with us. Perfect for date nights, game days, and milestone celebrations.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/booking">
+              <Link href="/packages">
                 <Button size="lg" variant="primary">Reserve Your Experience</Button>
               </Link>
               <Link href="/contact">

@@ -13,7 +13,7 @@ import Badge from '@/components/ui/Badge';
 import { 
   Search, Filter, Check, X, Trash2, Calendar as CalendarIcon, 
   TrendingUp, Users, DollarSign, Clock, LayoutDashboard, Settings,
-  AlertCircle, ChevronLeft, ChevronRight, Edit2, CheckCircle2
+  AlertCircle, ChevronLeft, ChevronRight, Edit2, CheckCircle2, Eye
 } from 'lucide-react';
 
 export default function AdminDashboardPage() {
@@ -23,6 +23,7 @@ export default function AdminDashboardPage() {
   const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'confirmed' | 'cancelled'>('all');
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [editBooking, setEditBooking] = useState<Booking | null>(null);
+  const [viewingReceiptBooking, setViewingReceiptBooking] = useState<Booking | null>(null);
   
   // Custom edit form state
   const [editForm, setEditForm] = useState({
@@ -495,6 +496,15 @@ export default function AdminDashboardPage() {
                                   <Check className="w-4 h-4" />
                                 </button>
                               )}
+                              {b.receipt_url && (
+                                <button
+                                  onClick={() => setViewingReceiptBooking(b)}
+                                  className="p-1.5 rounded-lg border border-glass-stroke text-purple-400 hover:bg-purple-500/10 hover:text-white transition-colors cursor-pointer"
+                                  title="View uploaded receipt"
+                                >
+                                  <Eye className="w-4 h-4" />
+                                </button>
+                              )}
                               {b.status !== 'cancelled' && (
                                 <button
                                   onClick={() => handleStatusUpdate(b.id, 'cancelled')}
@@ -573,6 +583,53 @@ export default function AdminDashboardPage() {
               </div>
             </form>
           </Card>
+        </div>
+      )}
+
+      {/* View Receipt Modal */}
+      {viewingReceiptBooking && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-5" onClick={() => setViewingReceiptBooking(null)}>
+          <div className="max-w-2xl w-full" onClick={(e) => e.stopPropagation()}>
+            <Card className="w-full p-6 border border-glass-stroke relative hover:!translate-y-0 cursor-default" glowColor="none">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="font-sans text-xl font-bold text-white uppercase tracking-wider">
+                Receipt for Booking {viewingReceiptBooking.id}
+              </h3>
+              <button 
+                onClick={() => setViewingReceiptBooking(null)}
+                className="text-on-surface-variant hover:text-white transition-colors cursor-pointer"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+            <div className="flex justify-center items-center bg-black/40 rounded-lg p-2 border border-glass-stroke max-h-[70vh] overflow-auto">
+              {viewingReceiptBooking.receipt_url ? (
+                <img 
+                  src={viewingReceiptBooking.receipt_url} 
+                  alt={`Receipt for Booking ${viewingReceiptBooking.id}`}
+                  className="max-w-full max-h-[60vh] object-contain rounded"
+                />
+              ) : (
+                <p className="text-on-surface-variant font-body py-10">No receipt image found.</p>
+              )}
+            </div>
+            <div className="mt-4 flex justify-between items-center text-sm font-mono text-on-surface-variant">
+              <span>Customer: {viewingReceiptBooking.customer_name}</span>
+              {viewingReceiptBooking.status === 'pending' && (
+                <Button 
+                  variant="primary" 
+                  size="sm"
+                  onClick={() => {
+                    handleStatusUpdate(viewingReceiptBooking.id, 'confirmed');
+                    setViewingReceiptBooking(null);
+                  }}
+                >
+                  Approve Booking
+                </Button>
+              )}
+            </div>
+          </Card>
+          </div>
         </div>
       )}
 

@@ -7,7 +7,7 @@ import Footer from '@/components/layout/Footer';
 import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
-import { MapPin, Phone, Mail, Clock, Send, CheckCircle2 } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, Send, CheckCircle2, AlertCircle } from 'lucide-react';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -19,13 +19,27 @@ export default function ContactPage() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    // Simulate API call
-    setTimeout(() => {
-      setIsSubmitting(false);
+    setError(null);
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Something went wrong. Please try again.');
+      }
+
       setIsSubmitted(true);
       setFormData({
         name: '',
@@ -34,7 +48,12 @@ export default function ContactPage() {
         subject: '',
         message: ''
       });
-    }, 1200);
+    } catch (err: any) {
+      console.error(err);
+      setError(err.message || 'Failed to send message. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -79,6 +98,12 @@ export default function ContactPage() {
                 ) : (
                   <form onSubmit={handleSubmit}>
                     <div className="space-y-6">
+                      {error && (
+                        <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-xl flex items-center gap-3 text-sm">
+                          <AlertCircle className="w-5 h-5 shrink-0" />
+                          <span>{error}</span>
+                        </div>
+                      )}
                       <div>
                         <label className="block font-sans text-[14px] font-bold text-white mb-2 uppercase tracking-wide">
                           Full Name
@@ -180,7 +205,7 @@ export default function ContactPage() {
                   <div>
                     <h3 className="font-sans text-[18px] font-bold text-white mb-1">Phone Helpline</h3>
                     <p className="font-body text-[15px] text-on-surface-variant">
-                      +94 11 234 5678 / +94 77 987 6543
+                      <a href="https://wa.me/94707735599" target="_blank" rel="noopener noreferrer" className="hover:text-tertiary transition-colors">+94 70 773 5599 (WhatsApp)</a>
                     </p>
                   </div>
                 </Card>
@@ -192,7 +217,7 @@ export default function ContactPage() {
                   <div>
                     <h3 className="font-sans text-[18px] font-bold text-white mb-1">Email Support</h3>
                     <p className="font-body text-[15px] text-on-surface-variant">
-                      bookings@naxora.lk
+                      <a href="mailto:naxoramovihub@gmail.com" className="hover:text-primary transition-colors">naxoramovihub@gmail.com</a>
                     </p>
                   </div>
                 </Card>
@@ -214,7 +239,7 @@ export default function ContactPage() {
                 <p className="font-body text-[16px] text-on-surface-variant mb-6">
                   Ready to book a slot for cinema or gaming?
                 </p>
-                <Link href="/booking">
+                <Link href="/packages">
                   <Button size="lg" variant="primary" className="w-full sm:w-auto">Book Your Experience</Button>
                 </Link>
               </div>

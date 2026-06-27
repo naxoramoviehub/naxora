@@ -13,10 +13,7 @@ export default function Header() {
   const pathname = usePathname();
 
   const navLinks = [
-    { href: '/movies', label: 'Movies' },
-    { href: '/gaming', label: 'Gaming' },
-    { href: '/celebrations', label: 'Celebrations' },
-    { href: '/booking', label: 'Experiences' },
+    { href: '/packages', label: 'Packages' },
   ];
 
   return (
@@ -53,7 +50,7 @@ export default function Header() {
 
         {/* Action Button & Mobile Menu Trigger */}
         <div className="flex items-center space-x-4">
-          <Link href="/booking">
+          <Link href="/packages">
             <Button size="sm" variant="primary" className="hidden sm:inline-flex">
               Book Now
             </Button>
@@ -110,7 +107,7 @@ export default function Header() {
               </div>
 
               <div className="mt-auto space-y-4">
-                <Link href="/booking" onClick={() => setMobileMenuOpen(false)}>
+                <Link href="/packages" onClick={() => setMobileMenuOpen(false)}>
                   <Button variant="primary" className="w-full">
                     Book Experience
                   </Button>

@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS public.bookings (
     booking_time TEXT NOT NULL, -- HH:MM formatted
     notes TEXT DEFAULT '',
     status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'confirmed', 'cancelled')),
+    receipt_url TEXT DEFAULT '',
     created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
 );
 

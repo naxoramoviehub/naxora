@@ -11,9 +11,10 @@ import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
 import { 
   Calendar as CalendarIcon, Clock, User, Check, AlertCircle, ArrowLeft, 
-  Copy, ExternalLink, MessageSquare, DollarSign, CheckCircle2, ChevronLeft, ChevronRight 
+  Copy, ExternalLink, MessageSquare, DollarSign, CheckCircle2, ChevronLeft, ChevronRight,
+  Upload, X
 } from 'lucide-react';
-import { TIME_SLOTS, createBooking, getBookedSlots, Booking } from '@/lib/database';
+import { TIME_SLOTS, createBooking, getBookedSlots, uploadBookingReceipt, Booking } from '@/lib/database';
 
 function BookingFormContent() {
   const params = useParams();
@@ -33,6 +34,12 @@ function BookingFormContent() {
 
   const [bookedSlots, setBookedSlots] = useState<{ time: string; status: Booking['status'] }[]>([]);
   const [createdBooking, setCreatedBooking] = useState<Booking | null>(null);
+  
+  // Receipt Upload State
+  const [receiptFile, setReceiptFile] = useState<File | null>(null);
+  const [receiptPreview, setReceiptPreview] = useState<string | null>(null);
+  const [uploadingReceipt, setUploadingReceipt] = useState(false);
+  const [receiptUploaded, setReceiptUploaded] = useState(false);
   
   // Persisted Countdown hold timer
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
@@ -75,7 +82,7 @@ function BookingFormContent() {
       duration: '3.0 Hours',
       capacity: 'Max 4 Pax',
       extraHour: '1000 LKR',
-      image: '/image-from-rawpixel-id-15201674-jpeg.jpg',
+      image: '/gold_vip_cabin.png',
       features: ['Climate A/C Control', 'Premium Reclining Sofa', 'Native 4K Projector Screen', '7.1 Positional Audio Setup']
     },
     'platinum': {
@@ -105,7 +112,7 @@ function BookingFormContent() {
       duration: '3.0 Hours',
       capacity: 'Max 6 Pax',
       extraHour: '1600 LKR',
-      image: '/image-from-rawpixel-id-15201674-jpeg.jpg',
+      image: '/gold_vip_cabin.png',
       features: ['Balloon & Banner Setup', 'Pro Wireless Karaoke Mics', 'PS5 / PS4 Pro System', 'Beverages & Catering Space']
     },
     'grand-celebration': {
@@ -115,7 +122,7 @@ function BookingFormContent() {
       duration: '4.0 Hours',
       capacity: 'Max 8 Pax',
       extraHour: '1900 LKR',
-      image: '/image-from-rawpixel-id-15201674-jpeg.jpg',
+      image: '/gold_vip_cabin.png',
       features: ['Full Balloon Theme Decor', 'Extended 4-Hour Block', 'Wireless Dual Karaoke Mics', 'PS5 Console + Games Suite', 'Complimentary Snack Tray']
     }
   };
@@ -174,8 +181,8 @@ function BookingFormContent() {
         <main className="flex-1 pt-20 flex items-center justify-center">
           <div className="text-center">
             <h1 className="font-sans text-[32px] font-bold text-white mb-4">Suite Not Found</h1>
-            <Link href="/booking">
-              <Button variant="primary">Back to Booking</Button>
+            <Link href="/packages">
+              <Button variant="primary">Back to Packages</Button>
             </Link>
           </div>
         </main>
@@ -224,7 +231,7 @@ function BookingFormContent() {
   // Generate WhatsApp message
   const triggerWhatsApp = () => {
     if (!createdBooking) return;
-    const phoneNum = '+94771234567'; // Admin phone
+    const phoneNum = '94707735599'; // Admin phone
     const text = `Hello NAXORA, I would like to submit my bank transfer receipt for confirmation.
 
 *Booking Details:*
@@ -239,8 +246,80 @@ function BookingFormContent() {
 
 I have attached the screenshot of the bank transfer transaction receipt below. Please confirm my slot. Thank you!`;
 
+    const pngBlob = (window as any)._receiptPngBlob;
+    if (pngBlob) {
+      try {
+        navigator.clipboard.write([
+          new ClipboardItem({
+            'image/png': pngBlob
+          })
+        ]);
+        alert('Receipt image copied to clipboard! Once WhatsApp opens, press Ctrl+V (or tap Paste) in the chat to attach it.');
+      } catch (err) {
+        console.error('Failed to copy pre-converted blob to clipboard:', err);
+      }
+    }
+
     const url = `https://api.whatsapp.com/send?phone=${phoneNum}&text=${encodeURIComponent(text)}`;
     window.open(url, '_blank');
+  };
+
+  // Handle receipt file selection and base64 preview
+  const handleReceiptFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 4 * 1024 * 1024) {
+      alert('File size exceeds the 4MB limit.');
+      return;
+    }
+
+    setReceiptFile(file);
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const dataUrl = reader.result as string;
+      setReceiptPreview(dataUrl);
+
+      // Pre-convert to PNG blob for instant clipboard copy on click
+      const img = document.createElement('img');
+      img.src = dataUrl;
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          ctx.drawImage(img, 0, 0);
+          canvas.toBlob((blob) => {
+            if (blob) {
+              (window as any)._receiptPngBlob = blob;
+            }
+          }, 'image/png');
+        }
+      };
+    };
+    reader.readAsDataURL(file);
+  };
+
+  // Upload receipt base64 to database
+  const handleReceiptUpload = async () => {
+    if (!createdBooking || !receiptPreview) return;
+    setUploadingReceipt(true);
+    try {
+      const updated = await uploadBookingReceipt(createdBooking.id, receiptPreview);
+      if (updated) {
+        setReceiptUploaded(true);
+        setCreatedBooking(updated);
+      } else {
+        alert('Failed to upload receipt. Please try again.');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error uploading receipt. Please try again.');
+    } finally {
+      setUploadingReceipt(false);
+    }
   };
 
   // Custom Calendar Helpers
@@ -317,7 +396,7 @@ I have attached the screenshot of the bank transfer transaction receipt below. P
         {/* Wizard progress header */}
         <section className="pt-16 pb-8 px-5 md:px-[80px] max-w-[1440px] mx-auto text-center">
           <div className="mb-4">
-            <Badge variant="primary">Step {step + 1} of 3</Badge>
+            <Badge variant="primary">Step {step} of 3</Badge>
           </div>
           <h1 className="font-sans text-[36px] md:text-[50px] font-extrabold text-white tracking-tight mb-4">
             {step === 1 ? 'Details Review' : step === 2 ? 'Schedule Time' : step === 3 ? 'Contact Info' : 'Submit Receipt'}
@@ -416,10 +495,10 @@ I have attached the screenshot of the bank transfer transaction receipt below. P
                   </div>
                 </div>
                 <div className="mt-10 flex justify-between border-t border-glass-stroke pt-6">
-                  <Link href="/booking">
+                  <Link href="/packages">
                     <Button variant="secondary" className="flex items-center gap-2">
                       <ArrowLeft className="w-4 h-4" />
-                      <span>Back to Suites</span>
+                      <span>Back to Packages</span>
                     </Button>
                   </Link>
                   <Button size="lg" onClick={() => setStep(2)}>Continue to Schedule</Button>
@@ -692,6 +771,84 @@ I have attached the screenshot of the bank transfer transaction receipt below. P
                       </span>
                     </div>
                   </div>
+                </div>
+
+                {/* Direct Receipt Submission */}
+                <div className="border border-glass-stroke/40 rounded-xl p-5 mb-8 bg-surface-container-low/20">
+                  <h4 className="font-sans text-[15px] font-bold text-white mb-3 uppercase tracking-wide flex items-center gap-2">
+                    <Upload className="w-4 h-4 text-primary" />
+                    <span>Direct Receipt Submission</span>
+                  </h4>
+                  
+                  {receiptUploaded ? (
+                    <div className="text-center py-4 flex flex-col items-center justify-center">
+                      <div className="w-12 h-12 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-500 mb-3">
+                        <Check className="w-6 h-6 animate-pulse" />
+                      </div>
+                      <h5 className="font-sans text-[15px] font-bold text-white mb-1">Receipt Submitted Successfully!</h5>
+                      <p className="font-body text-xs text-on-surface-variant mb-4">
+                        Thank you! Our coordinators will verify the payment and confirm your slot.
+                      </p>
+                      {receiptPreview && (
+                        <div className="max-w-[200px] rounded border border-glass-stroke overflow-hidden mb-2">
+                          <img src={receiptPreview} alt="Receipt Thumbnail" className="w-full h-auto object-cover max-h-[150px]" />
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="space-y-4 text-left">
+                      <p className="font-body text-xs text-on-surface-variant leading-relaxed">
+                        Upload your bank transfer receipt directly here for faster verification and automated tracking.
+                      </p>
+                      
+                      {!receiptPreview ? (
+                        <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-glass-stroke hover:border-primary/50 rounded-xl cursor-pointer hover:bg-primary/5 transition-all p-4">
+                          <div className="flex flex-col items-center justify-center text-center">
+                            <Upload className="w-8 h-8 text-on-surface-variant mb-2" />
+                            <span className="font-sans text-xs font-bold text-white mb-1">Click to select receipt image</span>
+                            <span className="font-body text-[10px] text-muted">Supports JPEG, PNG, WebP (Max 4MB)</span>
+                          </div>
+                          <input 
+                            type="file" 
+                            accept="image/jpeg,image/png,image/webp" 
+                            className="hidden" 
+                            onChange={handleReceiptFileChange}
+                          />
+                        </label>
+                      ) : (
+                        <div className="border border-glass-stroke rounded-xl p-3 bg-black/20 flex items-center justify-between gap-3">
+                          <div className="flex items-center gap-3">
+                            <img src={receiptPreview} alt="Preview" className="w-10 h-10 object-cover rounded border border-glass-stroke" />
+                            <div className="text-left">
+                              <p className="font-sans text-xs font-semibold text-white truncate max-w-[150px] sm:max-w-[200px]">
+                                {receiptFile?.name || 'receipt.png'}
+                              </p>
+                              <p className="font-body text-[10px] text-on-surface-variant">
+                                Ready to upload
+                              </p>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-1.5 shrink-0">
+                            <button 
+                              onClick={() => { setReceiptFile(null); setReceiptPreview(null); }}
+                              className="p-1.5 rounded-lg hover:bg-red-500/10 text-red-400 hover:text-white transition-colors cursor-pointer"
+                              title="Remove file"
+                            >
+                              <X className="w-4 h-4" />
+                            </button>
+                            <Button 
+                              variant="primary" 
+                              size="sm" 
+                              onClick={handleReceiptUpload}
+                              disabled={uploadingReceipt}
+                            >
+                              {uploadingReceipt ? 'Uploading...' : 'Submit'}
+                            </Button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 {/* Action buttons */}

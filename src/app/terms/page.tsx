@@ -86,7 +86,7 @@ export default function TermsPage() {
 
                 <h2 className="font-sans text-[28px] font-bold text-on-surface mb-4 mt-8">Contact Information</h2>
                 <p className="font-body text-[16px] text-on-surface-variant mb-6 leading-relaxed">
-                  For questions about these Terms of Service, please contact us at info@naxora.lk
+                  For questions about these Terms of Service, please contact us at <a href="mailto:naxoramovihub@gmail.com" className="text-primary hover:underline">naxoramovihub@gmail.com</a>
                 </p>
               </div>
             </Card>

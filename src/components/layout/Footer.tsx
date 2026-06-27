@@ -33,21 +33,21 @@ export default function Footer() {
 
           {/* Quick Links Column 1 */}
           <div>
-            <h4 className="font-sans text-[15px] font-bold text-white uppercase tracking-wider mb-5">Experiences</h4>
+            <h4 className="font-sans text-[15px] font-bold text-white uppercase tracking-wider mb-5">Offerings</h4>
             <ul className="space-y-3.5">
               <li>
-                <Link href="/movies" className="font-body text-[15px] text-on-surface-variant hover:text-white transition-colors">
-                  Private Cinema
+                <Link href="/packages" className="font-body text-[15px] text-on-surface-variant hover:text-white transition-colors">
+                  Private Suites
                 </Link>
               </li>
               <li>
-                <Link href="/gaming" className="font-body text-[15px] text-on-surface-variant hover:text-white transition-colors">
-                  Elite Gaming
+                <Link href="/packages#technology" className="font-body text-[15px] text-on-surface-variant hover:text-white transition-colors">
+                  Hardware Specs
                 </Link>
               </li>
               <li>
-                <Link href="/celebrations" className="font-body text-[15px] text-on-surface-variant hover:text-white transition-colors">
-                  Luxury Celebrations
+                <Link href="/packages#services" className="font-body text-[15px] text-on-surface-variant hover:text-white transition-colors">
+                  Event Services
                 </Link>
               </li>
             </ul>

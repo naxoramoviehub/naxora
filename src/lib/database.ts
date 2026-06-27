@@ -11,6 +11,7 @@ export interface Booking {
   notes: string;
   status: 'pending' | 'confirmed' | 'cancelled';
   created_at: string;
+  receipt_url?: string;
 }
 
 // Hardcoded time slots for high-fidelity booking experience
@@ -214,4 +215,35 @@ export async function getBookedSlots(date: string, experienceId: string): Promis
   return bookings
     .filter(b => b.booking_date === date && b.experience_id === experienceId && b.status !== 'cancelled')
     .map(b => ({ time: b.booking_time, status: b.status }));
+}
+
+export async function uploadBookingReceipt(id: string, receiptBase64: string): Promise<Booking | null> {
+  if (supabase) {
+    try {
+      const { data, error } = await supabase
+        .from('bookings')
+        .update({ receipt_url: receiptBase64 })
+        .eq('id', id)
+        .select()
+        .single();
+      if (error) throw error;
+      return data;
+    } catch (err) {
+      console.error('Supabase uploadBookingReceipt failed, falling back:', err);
+    }
+  }
+
+  const bookings = await getBookings();
+  const index = bookings.findIndex(b => b.id === id);
+  if (index !== -1) {
+    bookings[index] = {
+      ...bookings[index],
+      receipt_url: receiptBase64
+    };
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(bookings));
+    }
+    return bookings[index];
+  }
+  return null;
 }

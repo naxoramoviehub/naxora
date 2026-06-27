@@ -77,7 +77,7 @@ export default function PrivacyPage() {
 
                 <h2 className="font-sans text-[28px] font-bold text-on-surface mb-4 mt-8">Contact Us</h2>
                 <p className="font-body text-[16px] text-on-surface-variant mb-6 leading-relaxed">
-                  If you have questions about this Privacy Policy, please contact us at info@naxora.lk
+                  If you have questions about this Privacy Policy, please contact us at <a href="mailto:naxoramovihub@gmail.com" className="text-primary hover:underline">naxoramovihub@gmail.com</a>
                 </p>
               </div>
             </Card>
