@@ -48,6 +48,47 @@ export default function AdminDashboardPage() {
     'grand-celebration': 'Grand Celebration Package'
   };
 
+  const experiencePrices: Record<string, string> = {
+    'mini-cabin': '2350 LKR',
+    'elite-silver': '2550 LKR',
+    'gold': '3000 LKR',
+    'platinum': '3450 LKR',
+    'royal': '5300 LKR',
+    'lite-celebration': '6250 LKR',
+    'grand-celebration': '8950 LKR',
+  };
+
+  // Send booking confirmation email to customer
+  const sendConfirmationEmail = async (booking: Booking) => {
+    const timeDisplay =
+      booking.booking_time_display ||
+      TIME_SLOTS.find(ts => ts.time === booking.booking_time)?.display ||
+      booking.booking_time;
+    try {
+      await fetch('/api/confirm-booking', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          bookingId: booking.id,
+          customerName: booking.customer_name,
+          customerEmail: booking.customer_email,
+          customerPhone: booking.customer_phone,
+          packageTitle: booking.package_title || experiences[booking.experience_id] || booking.experience_id,
+          experienceId: booking.experience_id,
+          bookingDate: booking.booking_date,
+          bookingTimeDisplay: timeDisplay,
+          capacity: 'As booked',
+          amountDue: booking.amount_due || experiencePrices[booking.experience_id] || 'See package',
+          notes: booking.notes || '',
+          receiptBase64: booking.receipt_url || null,
+          receiptFilename: booking.receipt_filename || null,
+        }),
+      });
+    } catch (err) {
+      console.error('Failed to send confirmation email for', booking.id, err);
+    }
+  };
+
   useEffect(() => {
     setCurrentDate(new Date());
     setTodayStr(new Date().toISOString().split('T')[0]);
@@ -61,11 +102,16 @@ export default function AdminDashboardPage() {
     setLoading(false);
   };
 
-  // Status updates
+  // Status updates — fires confirmation email when approving
   const handleStatusUpdate = async (id: string, newStatus: Booking['status']) => {
+    const booking = bookings.find(b => b.id === id);
     const updated = await updateBookingStatus(id, newStatus);
     if (updated) {
       setBookings(prev => prev.map(b => b.id === id ? updated : b));
+      // Fire confirmation email to customer when admin confirms
+      if (newStatus === 'confirmed' && booking) {
+        sendConfirmationEmail({ ...booking, ...updated });
+      }
     }
   };
 
@@ -83,7 +129,7 @@ export default function AdminDashboardPage() {
   // Bulk actions
   const handleBulkAction = async (action: 'confirm' | 'cancel' | 'delete') => {
     if (selectedIds.length === 0) return;
-    
+
     if (action === 'delete') {
       if (!confirm(`Are you sure you want to delete ${selectedIds.length} selected bookings?`)) return;
       for (const id of selectedIds) {
@@ -95,6 +141,11 @@ export default function AdminDashboardPage() {
       const newStatus = action === 'confirm' ? 'confirmed' : 'cancelled';
       for (const id of selectedIds) {
         await updateBookingStatus(id, newStatus);
+        // Fire confirmation email for each newly confirmed booking
+        if (newStatus === 'confirmed') {
+          const booking = bookings.find(b => b.id === id);
+          if (booking) sendConfirmationEmail(booking);
+        }
       }
       setBookings(prev => prev.map(b => selectedIds.includes(b.id) ? { ...b, status: newStatus } : b));
       setSelectedIds([]);

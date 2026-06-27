@@ -228,31 +228,68 @@ function BookingFormContent() {
     alert('Copied to clipboard!');
   };
 
-  // Generate WhatsApp message
-  const triggerWhatsApp = () => {
+  // Generate WhatsApp message and send booking receipt email
+  const triggerWhatsApp = async () => {
     if (!createdBooking) return;
     const phoneNum = '94707735599'; // Admin phone
+    const timeDisplay = TIME_SLOTS.find(ts => ts.time === createdBooking.booking_time)?.display || createdBooking.booking_time;
+
     const text = `Hello NAXORA, I would like to submit my bank transfer receipt for confirmation.
 
 *Booking Details:*
 - *Booking ID:* ${createdBooking.id}
 - *Customer:* ${createdBooking.customer_name}
 - *Package:* ${experience.title}
-- *Date & Time:* ${createdBooking.booking_date} at ${
-      TIME_SLOTS.find(ts => ts.time === createdBooking.booking_time)?.display || createdBooking.booking_time
-    }
+- *Date & Time:* ${createdBooking.booking_date} at ${timeDisplay}
 - *Participants:* ${experience.capacity}
 - *Reference:* ${createdBooking.id}-REC
 
 I have attached the screenshot of the bank transfer transaction receipt below. Please confirm my slot. Thank you!`;
 
+    // ── Send booking receipt email to admin ──
+    try {
+      await fetch('/api/booking-receipt', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          bookingId: createdBooking.id,
+          customerName: createdBooking.customer_name,
+          customerEmail: formData.email,
+          customerPhone: formData.phone,
+          packageTitle: experience.title,
+          bookingDate: createdBooking.booking_date,
+          bookingTime: timeDisplay,
+          capacity: experience.capacity,
+          amountDue: experience.price,
+          receiptBase64: receiptPreview || null,
+          receiptFileName: receiptFile?.name || null,
+        }),
+      });
+    } catch (err) {
+      console.error('Failed to send booking receipt email:', err);
+    }
+
+    // ── Persist receipt + package metadata to Supabase ──
+    if (receiptPreview) {
+      try {
+        await uploadBookingReceipt(createdBooking.id, {
+          receiptBase64: receiptPreview,
+          receiptFilename: receiptFile?.name || 'receipt.png',
+          packageTitle: experience.title,
+          bookingTimeDisplay: timeDisplay,
+          amountDue: experience.price,
+        });
+      } catch (err) {
+        console.error('Failed to save receipt to Supabase:', err);
+      }
+    }
+
+    // ── Copy receipt image to clipboard for WhatsApp paste ──
     const pngBlob = (window as any)._receiptPngBlob;
     if (pngBlob) {
       try {
         navigator.clipboard.write([
-          new ClipboardItem({
-            'image/png': pngBlob
-          })
+          new ClipboardItem({ 'image/png': pngBlob })
         ]);
         alert('Receipt image copied to clipboard! Once WhatsApp opens, press Ctrl+V (or tap Paste) in the chat to attach it.');
       } catch (err) {
@@ -307,7 +344,13 @@ I have attached the screenshot of the bank transfer transaction receipt below. P
     if (!createdBooking || !receiptPreview) return;
     setUploadingReceipt(true);
     try {
-      const updated = await uploadBookingReceipt(createdBooking.id, receiptPreview);
+      const updated = await uploadBookingReceipt(createdBooking.id, {
+        receiptBase64: receiptPreview,
+        receiptFilename: receiptFile?.name || 'receipt.png',
+        packageTitle: experience?.title || '',
+        bookingTimeDisplay: TIME_SLOTS.find(ts => ts.time === createdBooking.booking_time)?.display || createdBooking.booking_time,
+        amountDue: experience?.price || '',
+      });
       if (updated) {
         setReceiptUploaded(true);
         setCreatedBooking(updated);

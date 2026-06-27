@@ -6,12 +6,16 @@ export interface Booking {
   customer_email: string;
   customer_phone: string;
   experience_id: string;
-  booking_date: string; // YYYY-MM-DD
-  booking_time: string; // HH:MM
+  package_title?: string;        // Human-readable package name
+  booking_date: string;          // YYYY-MM-DD
+  booking_time: string;          // HH:MM
+  booking_time_display?: string; // e.g. '09:30 AM - 12:30 PM'
   notes: string;
   status: 'pending' | 'confirmed' | 'cancelled';
   created_at: string;
-  receipt_url?: string;
+  receipt_url?: string;          // Base64 encoded receipt image
+  receipt_filename?: string;     // Original filename of the uploaded receipt
+  amount_due?: string;           // Package price string (e.g. '2350 LKR')
 }
 
 // Hardcoded time slots for high-fidelity booking experience
@@ -217,12 +221,28 @@ export async function getBookedSlots(date: string, experienceId: string): Promis
     .map(b => ({ time: b.booking_time, status: b.status }));
 }
 
-export async function uploadBookingReceipt(id: string, receiptBase64: string): Promise<Booking | null> {
+export interface ReceiptMetadata {
+  receiptBase64: string;
+  receiptFilename?: string;
+  packageTitle?: string;
+  bookingTimeDisplay?: string;
+  amountDue?: string;
+}
+
+export async function uploadBookingReceipt(id: string, meta: ReceiptMetadata): Promise<Booking | null> {
+  const updatePayload: Partial<Booking> = {
+    receipt_url: meta.receiptBase64,
+    receipt_filename: meta.receiptFilename || '',
+    package_title: meta.packageTitle || '',
+    booking_time_display: meta.bookingTimeDisplay || '',
+    amount_due: meta.amountDue || '',
+  };
+
   if (supabase) {
     try {
       const { data, error } = await supabase
         .from('bookings')
-        .update({ receipt_url: receiptBase64 })
+        .update(updatePayload)
         .eq('id', id)
         .select()
         .single();
@@ -233,13 +253,11 @@ export async function uploadBookingReceipt(id: string, receiptBase64: string): P
     }
   }
 
+  // Local storage fallback
   const bookings = await getBookings();
   const index = bookings.findIndex(b => b.id === id);
   if (index !== -1) {
-    bookings[index] = {
-      ...bookings[index],
-      receipt_url: receiptBase64
-    };
+    bookings[index] = { ...bookings[index], ...updatePayload };
     if (typeof window !== 'undefined') {
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(bookings));
     }
