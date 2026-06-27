@@ -5,81 +5,82 @@ import Footer from '@/components/layout/Footer';
 import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
+import { Sparkles, UtensilsCrossed, Palette, Camera, Music, Wine, Compass } from 'lucide-react';
 
 export default function CelebrationsPage() {
   const eventTypes = [
     {
       id: 1,
       title: 'Lite Celebration Package',
-      description: 'Perfect for small parties and gatherings with party setup and karaoke',
+      description: 'Perfect for small parties and intimate gatherings with custom decorations and karaoke.',
       price: '6250 LKR',
       capacity: 'Max 6 pax',
       duration: '3 hours',
       image: '/image-from-rawpixel-id-15201674-jpeg.jpg',
-      features: ['Party setup', 'Spacious cabin', 'PS4 Gaming', 'Netflix / YouTube', 'Karaoke setup', '4K Projector']
+      features: ['Basic party decorations', 'Spacious private cabin', 'PS4 multiplayer gaming', 'Netflix & YouTube streaming', 'Pro karaoke microphone setup', '4K projector screen']
     },
     {
       id: 2,
       title: 'Grand Celebration Package',
-      description: 'The ultimate celebration experience for larger groups',
+      description: 'The ultimate entertainment celebration experience for medium-sized groups.',
       price: '8950 LKR',
       capacity: 'Max 8 pax',
       duration: '4 hours',
       image: '/image-from-rawpixel-id-14510238-jpeg.jpg',
-      features: ['Party setup', 'Spacious cabin', 'Karaoke setup', 'PS4 Gaming', 'Netflix / YouTube']
+      features: ['Full balloon & banner theme setup', 'Premium extra-spacious suite', 'Dual wireless karaoke system', 'PS4 gaming with 4 controllers', 'Free snack & beverage platter', '4K high-contrast screens']
     },
     {
       id: 3,
-      title: 'Royal Package',
-      description: 'Spacious luxury experience for groups with gaming and entertainment',
+      title: 'Royal VIP Package',
+      description: 'Spacious luxury group experience, custom-tailored with catering options.',
       price: '5300 LKR',
       capacity: 'Max 6 pax',
       duration: '3 hours',
       image: '/image-from-rawpixel-id-12136149-jpeg.jpg',
-      features: ['PS4 Gaming', 'Netflix / YouTube', 'Spacious cabin', '7.1 sound system', '4K Projector']
+      features: ['VIP lounge seating comfort', 'Premium A/C cabin control', '7.1 immersive surround sound', '4K projection screens', 'Netflix, YouTube & Spotify', 'Optional catering additions']
     },
     {
       id: 4,
-      title: 'Platinum Package',
-      description: 'Ultimate gaming and entertainment experience',
+      title: 'Platinum Gamer Suite',
+      description: 'The ultimate gaming-themed celebration for you and your crew.',
       price: '3450 LKR',
       capacity: 'Max 4 pax',
       duration: '3 hours',
       image: '/f21b86159275023.639b110867040.jpg',
-      features: ['PS4 Gaming', 'Netflix / YouTube', '4K Projector', '7.1 sound system']
+      features: ['Advanced console setups', 'Low-latency screen specs', '7.1 surround sound design', 'A/C climate-controlled cabin', 'Catering delivery support', 'Dual microphone inputs']
     }
   ];
 
   const services = [
     {
-      icon: '🍽️',
-      title: 'Premium Catering',
-      description: 'Gourmet menus prepared by world-class chefs'
+      icon: <UtensilsCrossed className="w-6 h-6" />,
+      title: 'Gourmet Catering',
+      description: 'Bespoke menus featuring snack platters, mocktails, and customized pastries.'
     },
     {
-      icon: '🎨',
-      title: 'Custom Decor',
-      description: 'Personalized decorations to match your theme'
+      icon: <Palette className="w-6 h-6" />,
+      title: 'Themed Decor',
+      description: 'Balloons, banners, fairy lights, and themed table arrangements tailored to your event.'
     },
     {
-      icon: '📸',
-      title: 'Professional Photography',
-      description: 'Capture memories with professional photographers'
+      icon: <Camera className="w-6 h-6" />,
+      title: 'Photography Packages',
+      description: 'Professional photographers to capture high-definition candid moments of your party.'
     },
     {
-      icon: '🎵',
-      title: 'Live Entertainment',
-      description: 'DJs, live bands, and performers available'
+      icon: <Music className="w-6 h-6" />,
+      title: 'Pro Karaoke System',
+      description: 'High-end microphones, adjustable vocal reverb, and thousands of songs on demand.'
     },
     {
-      icon: '🥂',
-      title: 'Premium Bar Service',
-      description: 'Top-shelf beverages and custom cocktails'
+      icon: <Wine className="w-6 h-6" />,
+      title: 'Beverage Bar',
+      description: 'Juices, premium mocktails, coffees, and soft drinks served directly to your cabin.'
     },
     {
-      icon: '👔',
-      title: 'Event Coordination',
-      description: 'Dedicated event coordinator for seamless experience'
+      icon: <Compass className="w-6 h-6" />,
+      title: 'Host Coordination',
+      description: 'A dedicated event coordinator to manage food, drinks, and technical setup seamlessly.'
     }
   ];
 
@@ -89,49 +90,52 @@ export default function CelebrationsPage() {
       
       <main className="flex-1 pt-20">
         {/* Hero Section */}
-        <section className="relative min-h-[60vh] flex items-center justify-center hero-mesh overflow-hidden">
-          <div className="absolute inset-0 opacity-10">
-            <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/10"></div>
+        <section className="relative min-h-[50vh] flex items-center justify-center bg-gradient-to-b from-surface-container/30 to-background overflow-hidden px-5">
+          <div className="absolute inset-0 opacity-10 pointer-events-none">
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-tertiary/10"></div>
           </div>
           
-          <div className="relative z-10 text-center px-[20px] md:px-[80px] max-w-[1440px] mx-auto">
-            <Badge variant="secondary" className="mb-4">Luxury Events</Badge>
-            <h1 className="font-sans text-[40px] md:text-[64px] font-extrabold leading-[1.1] tracking-tight text-on-surface mb-6 gradient-text">
-              Luxury Celebrations
+          <div className="relative z-10 text-center max-w-[800px] mx-auto pt-10">
+            <Badge variant="secondary" className="mb-4">Bespoke Celebrations</Badge>
+            <h1 className="font-sans text-[44px] md:text-[68px] font-extrabold leading-[1.1] tracking-tight text-white mb-6">
+              Memories In Luxury
             </h1>
-            <p className="font-body text-[18px] md:text-[20px] text-on-surface-variant max-w-2xl mx-auto mb-8 leading-relaxed">
-              Transform your special occasions into extraordinary experiences with our exclusive event spaces, premium services, and personalized attention to detail.
+            <p className="font-body text-[16px] sm:text-[18px] text-on-surface-variant max-w-xl mx-auto mb-8 leading-relaxed">
+              Transform birthdays, anniversaries, or casual group gatherings into premium private entertainment events.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/booking">
-                <Button size="lg">Plan Your Event</Button>
+                <Button size="lg" variant="primary">Explore Packages</Button>
               </Link>
               <Link href="/contact">
-                <Button variant="secondary" size="lg">Contact Event Team</Button>
+                <Button variant="secondary" size="lg">Consult Event Team</Button>
               </Link>
             </div>
           </div>
         </section>
 
         {/* Services */}
-        <section className="py-[120px] px-[20px] md:px-[80px] max-w-[1440px] mx-auto">
+        <section className="py-20 px-5 md:px-[80px] max-w-[1440px] mx-auto">
           <div className="text-center mb-16">
-            <h2 className="font-sans text-[32px] md:text-[48px] font-bold text-on-surface mb-4">
-              Premium Services
+            <Badge variant="default" className="mb-4">Party Enhancements</Badge>
+            <h2 className="font-sans text-[36px] md:text-[50px] font-bold text-white tracking-tight">
+              Premium Event Services
             </h2>
-            <p className="font-body text-[18px] text-on-surface-variant max-w-2xl mx-auto">
-              Everything you need for an unforgettable celebration, all under one roof.
+            <p className="font-body text-[16px] text-on-surface-variant max-w-xl mx-auto leading-relaxed">
+              From gourmet food platters to customizable decorations, we coordinate everything.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {services.map((service, index) => (
-              <Card key={index} glowColor="purple" className="p-6 text-center">
-                <div className="text-4xl mb-4">{service.icon}</div>
-                <h3 className="font-sans text-[20px] font-bold text-on-surface mb-3">
+              <Card key={index} glowColor="purple" className="p-8 flex flex-col items-center text-center">
+                <div className="w-14 h-14 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary mb-6">
+                  {service.icon}
+                </div>
+                <h3 className="font-sans text-[20px] font-bold text-white mb-3">
                   {service.title}
                 </h3>
-                <p className="font-body text-[16px] text-on-surface-variant">
+                <p className="font-body text-[15px] text-on-surface-variant leading-relaxed">
                   {service.description}
                 </p>
               </Card>
@@ -140,52 +144,49 @@ export default function CelebrationsPage() {
         </section>
 
         {/* Event Types */}
-        <section className="py-[120px] px-[20px] md:px-[80px] bg-surface-container/30">
+        <section className="py-24 px-5 md:px-[80px] bg-surface-container-lowest/40">
           <div className="max-w-[1440px] mx-auto">
             <div className="text-center mb-16">
-              <h2 className="font-sans text-[32px] md:text-[48px] font-bold text-on-surface mb-4">
-                Event Types
+              <Badge variant="secondary" className="mb-4">Cabins Matrix</Badge>
+              <h2 className="font-sans text-[36px] md:text-[50px] font-bold text-white tracking-tight">
+                Luxury Party Suites
               </h2>
-              <p className="font-body text-[18px] text-on-surface-variant max-w-2xl mx-auto">
-                From intimate gatherings to grand celebrations, we have the perfect space for your event.
+              <p className="font-body text-[16px] text-on-surface-variant max-w-xl mx-auto">
+                Choose the perfect cabin size and feature set for your party size.
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {eventTypes.map((event) => (
-                <Card key={event.id} glowColor="purple" className="group">
-                  <div className="relative h-64 mb-6 overflow-hidden rounded-lg">
+                <Card key={event.id} glowColor="purple" className="group flex flex-col p-6">
+                  <div className="relative h-64 mb-6 overflow-hidden rounded-xl bg-surface-base">
                     <Image
                       src={event.image}
                       alt={event.title}
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 50vw"
-                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                   </div>
                   
-                  <Badge variant="secondary" className="mb-3">Event</Badge>
-                  <h3 className="font-sans text-[24px] font-bold text-on-surface mb-2">
+                  <div className="flex items-center justify-between mb-3">
+                    <Badge variant="secondary">{event.capacity}</Badge>
+                    <span className="font-mono text-sm text-primary font-bold">{event.price}</span>
+                  </div>
+                  
+                  <h3 className="font-sans text-[24px] font-bold text-white mb-2 group-hover:text-primary transition-colors">
                     {event.title}
                   </h3>
                   
-                  <p className="font-body text-[16px] text-on-surface-variant mb-4 line-clamp-2">
+                  <p className="font-body text-[15px] text-on-surface-variant mb-6 leading-relaxed">
                     {event.description}
                   </p>
-
-                  <div className="flex items-center gap-4 mb-4 text-sm text-on-surface-variant">
-                    <span className="font-mono">{event.capacity}</span>
-                    <span>•</span>
-                    <span className="font-mono">{event.duration}</span>
-                    <span>•</span>
-                    <span className="font-mono">{event.price}</span>
-                  </div>
                   
-                  <div className="border-t border-glass-stroke pt-4 mb-6">
-                    <ul className="space-y-1">
+                  <div className="border-t border-glass-stroke pt-6 mb-8 flex-grow">
+                    <ul className="grid grid-cols-1 sm:grid-cols-2 gap-y-2 gap-x-4">
                       {event.features.map((feature, index) => (
-                        <li key={index} className="font-body text-sm text-on-surface-variant flex items-center gap-2">
-                          <span className="text-primary">✓</span>
+                        <li key={index} className="font-body text-[14px] text-on-surface-variant flex items-center gap-2">
+                          <span className="text-primary text-xs">✓</span>
                           {feature}
                         </li>
                       ))}
@@ -193,7 +194,7 @@ export default function CelebrationsPage() {
                   </div>
                   
                   <Link href="/booking">
-                    <Button className="w-full">Book This Event</Button>
+                    <Button className="w-full" variant="primary">Book This Suite</Button>
                   </Link>
                 </Card>
               ))}
@@ -202,22 +203,22 @@ export default function CelebrationsPage() {
         </section>
 
         {/* Custom Events CTA */}
-        <section className="py-[120px] px-[20px] md:px-[80px]">
+        <section className="py-20 px-5 md:px-[80px]">
           <div className="max-w-[1440px] mx-auto">
-            <Card className="text-center p-12 md:p-16 hero-mesh">
-              <Badge variant="secondary" className="mb-4">Custom Events</Badge>
-              <h2 className="font-sans text-[32px] md:text-[48px] font-bold text-on-surface mb-6">
-                Have Something Unique in Mind?
+            <Card className="p-12 md:p-16 text-center hero-mesh border border-glass-stroke rounded-3xl">
+              <Badge variant="primary" className="mb-4">Tailored Experience</Badge>
+              <h2 className="font-sans text-[32px] md:text-[46px] font-bold text-white mb-4 tracking-tight">
+                Planning a Large Celebration?
               </h2>
-              <p className="font-body text-[18px] text-on-surface-variant max-w-2xl mx-auto mb-8">
-                Our event specialists can help create a completely customized experience tailored to your vision. From themed parties to product launches, we make it happen.
+              <p className="font-body text-[16px] sm:text-[18px] text-on-surface-variant max-w-xl mx-auto mb-8 leading-relaxed">
+                Connect with our coordination desk to reserve multiple cabins, configure a specialized catering menu, or request custom-printed birthday invitations.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link href="/contact">
-                  <Button size="lg">Discuss Custom Event</Button>
+                  <Button size="lg" variant="primary">Discuss Custom Event</Button>
                 </Link>
                 <Link href="/booking">
-                  <Button variant="secondary" size="lg">View Standard Packages</Button>
+                  <Button variant="secondary" size="lg">Standard Packages</Button>
                 </Link>
               </div>
             </Card>

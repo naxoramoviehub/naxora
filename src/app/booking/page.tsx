@@ -9,6 +9,7 @@ import Footer from '@/components/layout/Footer';
 import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
+import { Sparkles, Calendar, User, Clock, Check } from 'lucide-react';
 
 export default function BookingPage() {
   const router = useRouter();
@@ -17,80 +18,87 @@ export default function BookingPage() {
   const experiences = [
     {
       id: 'mini-cabin',
-      title: 'Mini Cabin',
-      description: 'Perfect for intimate entertainment sessions',
+      title: 'Mini Cabin Suite',
+      description: 'Intimate private lounge perfect for couples or small groups.',
       price: '2350 LKR',
-      duration: '2.5 hours',
-      capacity: 'Max 3 pax',
+      duration: '2.5 Hours',
+      capacity: 'Max 3 Pax',
       extraHour: '900 LKR',
       image: '/image-from-rawpixel-id-12136149-jpeg.jpg',
-      features: ['Netflix / YouTube', 'NON A/C Cabin', 'FHD Projector', '5.1 sound system']
+      category: 'Cinema',
+      features: ['Netflix / YouTube HD', 'Comfortable Sofa Cabin', '1080p Laser Projector', '5.1 Positional Audio']
     },
     {
       id: 'elite-silver',
-      title: 'Elite / Silver Package',
-      description: 'Enhanced entertainment experience',
+      title: 'Elite Silver Suite',
+      description: 'Enhanced screen size and audio fidelity for a cinematic experience.',
       price: '2550 LKR',
-      duration: '3 hours',
-      capacity: 'Max 4 pax',
+      duration: '3.0 Hours',
+      capacity: 'Max 4 Pax',
       extraHour: '900 LKR',
       image: '/image-from-rawpixel-id-14510238-jpeg.jpg',
-      features: ['Netflix / YouTube', 'NON A/C cabin', 'FHD Projector', '5.1 sound system']
+      category: 'Cinema',
+      features: ['Netflix / YouTube HD', 'Premium Leather Recliners', 'Full HD Projector System', '5.1 Surround Sound Array']
     },
     {
       id: 'gold',
-      title: 'Gold Package',
-      description: 'Premium comfort with air conditioning',
+      title: 'Gold VIP Cabin',
+      description: 'Complete luxury with climate-control air conditioning and 4K resolution.',
       price: '3000 LKR',
-      duration: '3 hours',
-      capacity: 'Max 4 pax',
+      duration: '3.0 Hours',
+      capacity: 'Max 4 Pax',
       extraHour: '1000 LKR',
       image: '/image-from-rawpixel-id-15201674-jpeg.jpg',
-      features: ['Netflix / YouTube', 'A/C cabin', '4K Projector', '7.1 sound system']
+      category: 'Cinema & Gaming',
+      features: ['Climate A/C Control', 'Premium Reclining Sofa', 'Native 4K Projector Screen', '7.1 Positional Audio Setup']
     },
     {
       id: 'platinum',
-      title: 'Platinum Package',
-      description: 'Ultimate gaming and entertainment',
+      title: 'Platinum Gamer Suite',
+      description: 'High-performance console gaming setup coupled with cinematic movie streams.',
       price: '3450 LKR',
-      duration: '3 hours',
-      capacity: 'Max 4 pax',
+      duration: '3.0 Hours',
+      capacity: 'Max 4 Pax',
       extraHour: '1000 LKR',
       image: '/image-from-rawpixel-id-12136149-jpeg.jpg',
-      features: ['PS4 Gaming', 'Netflix / YouTube', '4K Projector', '7.1 sound system']
+      category: 'Gaming Focus',
+      features: ['PS5 / PS4 Pro Console', '4 Wireless Controllers', 'Climate A/C Control', '7.1 Sound & 4K Projector']
     },
     {
       id: 'royal',
-      title: 'Royal Package',
-      description: 'Spacious luxury for groups',
+      title: 'Royal VIP Suite',
+      description: 'Generous suite size designed for larger family viewings or group co-op gaming.',
       price: '5300 LKR',
-      duration: '3 hours',
-      capacity: 'Max 6 pax',
+      duration: '3.0 Hours',
+      capacity: 'Max 6 Pax',
       extraHour: '1300 LKR',
       image: '/image-from-rawpixel-id-14510238-jpeg.jpg',
-      features: ['PS4 Gaming', 'Netflix / YouTube', 'Spacious cabin', '7.1 sound system', '4K Projector']
+      category: 'Celebration VIP',
+      features: ['VIP Lounge Seating', 'PS5 Console / PS4 Pro', 'Large 4K Laser Screen', '7.1 Positional Audio Setup']
     },
     {
       id: 'lite-celebration',
       title: 'Lite Celebration Package',
-      description: 'Perfect for small parties and gatherings',
+      description: 'Ideal package for hosting surprise birthday parties or small milestones.',
       price: '6250 LKR',
-      duration: '3 hours',
-      capacity: 'Max 6 pax',
+      duration: '3.0 Hours',
+      capacity: 'Max 6 Pax',
       extraHour: '1600 LKR',
       image: '/image-from-rawpixel-id-15201674-jpeg.jpg',
-      features: ['Party setup', 'Spacious cabin', 'PS4 Gaming', 'Netflix / YouTube', 'Karaoke setup', '4K Projector']
+      category: 'Celebration Focus',
+      features: ['Balloon & Banner Setup', 'Pro Wireless Karaoke Mics', 'PS5 / PS4 Pro System', 'Beverages & Catering Space']
     },
     {
       id: 'grand-celebration',
       title: 'Grand Celebration Package',
-      description: 'The ultimate celebration experience',
+      description: 'Our ultimate luxury party package with extended duration and full decorations.',
       price: '8950 LKR',
-      duration: '4 hours',
-      capacity: 'Max 8 pax',
+      duration: '4.0 Hours',
+      capacity: 'Max 8 Pax',
       extraHour: '1900 LKR',
       image: '/image-from-rawpixel-id-15201674-jpeg.jpg',
-      features: ['Party setup', 'Spacious cabin', 'Karaoke setup', 'PS4 Gaming', 'Netflix / YouTube']
+      category: 'Celebration Focus',
+      features: ['Full Balloon Theme Decor', 'Extended 4-Hour Block', 'Wireless Dual Karaoke Mics', 'PS5 Console + Games Suite', 'Complimentary Snack Tray']
     }
   ];
 
@@ -109,128 +117,126 @@ export default function BookingPage() {
       <Header />
       
       <main className="flex-1 pt-20">
-        {/* Header */}
-        <section className="py-[60px] px-[20px] md:px-[80px] max-w-[1440px] mx-auto">
-          <div className="text-center mb-8">
-            <Badge variant="primary" className="mb-4">Step 1 of 4</Badge>
-            <h1 className="font-sans text-[40px] md:text-[48px] font-bold text-on-surface mb-4">
-              Select Your Experience
-            </h1>
-            <p className="font-body text-[18px] text-on-surface-variant max-w-2xl mx-auto">
-              Choose from our exclusive experiences designed for unforgettable entertainment.
-            </p>
+        {/* Step Indicator Header */}
+        <section className="pt-16 pb-8 px-5 md:px-[80px] max-w-[1440px] mx-auto text-center">
+          <div className="mb-4">
+            <Badge variant="primary">Step 1 of 3</Badge>
           </div>
+          <h1 className="font-sans text-[36px] md:text-[52px] font-extrabold text-white tracking-tight mb-4">
+            Select Your Suite
+          </h1>
+          <p className="font-body text-[16px] sm:text-[18px] text-on-surface-variant max-w-2xl mx-auto mb-12">
+            Choose the private cinema cabin or celebration suite that fits your group size and entertainment needs.
+          </p>
 
-          {/* Progress Bar */}
-          <div className="max-w-2xl mx-auto mb-12">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <div className="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center font-mono text-sm font-bold">1</div>
-                <span className="ml-2 font-body text-sm text-on-surface">Experience</span>
+          {/* Clean Progress Wizard Bar */}
+          <div className="max-w-md mx-auto relative mb-12">
+            <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-surface-container -translate-y-1/2 z-0" />
+            <div className="absolute top-1/2 left-0 w-1/3 h-[2px] bg-primary -translate-y-1/2 z-0 transition-all duration-300" />
+            <div className="relative z-10 flex justify-between">
+              <div className="flex flex-col items-center">
+                <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-mono text-sm font-bold shadow-lg shadow-primary/25">1</div>
+                <span className="text-xs font-semibold text-white mt-2">Suite</span>
               </div>
-              <div className="flex-1 h-1 bg-surface-container mx-4">
-                <div className="h-full bg-primary w-1/4"></div>
-              </div>
-              <div className="flex items-center">
+              <div className="flex flex-col items-center">
                 <div className="w-8 h-8 rounded-full bg-surface-container text-on-surface-variant flex items-center justify-center font-mono text-sm font-bold">2</div>
-                <span className="ml-2 font-body text-sm text-on-surface-variant">Date & Time</span>
+                <span className="text-xs font-medium text-on-surface-variant mt-2">Time Slot</span>
               </div>
-              <div className="flex-1 h-1 bg-surface-container mx-4"></div>
-              <div className="flex items-center">
+              <div className="flex flex-col items-center">
                 <div className="w-8 h-8 rounded-full bg-surface-container text-on-surface-variant flex items-center justify-center font-mono text-sm font-bold">3</div>
-                <span className="ml-2 font-body text-sm text-on-surface-variant">Details</span>
-              </div>
-              <div className="flex-1 h-1 bg-surface-container mx-4"></div>
-              <div className="flex items-center">
-                <div className="w-8 h-8 rounded-full bg-surface-container text-on-surface-variant flex items-center justify-center font-mono text-sm font-bold">4</div>
-                <span className="ml-2 font-body text-sm text-on-surface-variant">Confirm</span>
+                <span className="text-xs font-medium text-on-surface-variant mt-2">Details</span>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Experience Cards */}
-        <section className="pb-[120px] px-[20px] md:px-[80px] max-w-[1440px] mx-auto">
+        {/* Experience Cards Grid */}
+        <section className="pb-24 px-5 md:px-[80px] max-w-[1440px] mx-auto z-10 relative">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {experiences.map((experience) => (
-              <Card
-                key={experience.id}
-                glowColor={selectedExperience === experience.id ? 'purple' : 'none'}
-                className={`cursor-pointer transition-all ${
-                  selectedExperience === experience.id ? 'border-primary/50 ring-2 ring-primary/20' : ''
-                }`}
-                onClick={() => handleSelect(experience.id)}
-              >
-                <div className="relative h-48 mb-6 overflow-hidden rounded-lg">
-                  <div className="absolute inset-0 bg-gradient-to-t from-surface-elevated to-transparent z-10" />
-                  <Image
-                    src={experience.image}
-                    alt={experience.title}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-                    className="object-cover"
-                  />
-                  {selectedExperience === experience.id && (
-                    <div className="absolute top-3 right-3 z-20">
-                      <Badge variant="primary">Selected</Badge>
+            {experiences.map((exp) => {
+              const isSelected = selectedExperience === exp.id;
+              return (
+                <Card
+                  key={exp.id}
+                  glowColor={isSelected ? 'purple' : 'none'}
+                  className={`cursor-pointer group flex flex-col p-5 border transition-all duration-300 ${
+                    isSelected ? 'border-primary bg-surface-container/60 shadow-[0_0_20px_rgba(139,92,246,0.15)]' : 'border-glass-stroke hover:bg-surface-elevated/40'
+                  }`}
+                  onClick={() => handleSelect(exp.id)}
+                >
+                  {/* Photo Container */}
+                  <div className="relative h-44 mb-5 overflow-hidden rounded-xl bg-surface-base">
+                    <Image
+                      src={exp.image}
+                      alt={exp.title}
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 20vw"
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute top-3 left-3 z-10">
+                      <span className="font-mono text-[10px] font-bold uppercase bg-background/80 backdrop-blur-sm border border-glass-stroke text-white px-2 py-0.5 rounded-full">
+                        {exp.category}
+                      </span>
                     </div>
-                  )}
-                </div>
-
-                <h3 className="font-sans text-[24px] font-bold text-on-surface mb-2">
-                  {experience.title}
-                </h3>
-                
-                <p className="font-body text-[16px] text-on-surface-variant mb-4">
-                  {experience.description}
-                </p>
-
-                <div className="flex items-baseline gap-2 mb-4">
-                  <span className="font-sans text-[28px] font-bold text-primary">{experience.price}</span>
-                </div>
-
-                <div className="space-y-2 mb-6">
-                  <div className="flex items-center gap-2 text-sm text-on-surface-variant">
-                    <span className="font-mono">⏱</span>
-                    <span>{experience.duration}</span>
+                    {isSelected && (
+                      <div className="absolute top-3 right-3 z-10 w-6 h-6 rounded-full bg-primary flex items-center justify-center text-white border border-primary/20 shadow-lg">
+                        <Check className="w-3.5 h-3.5 stroke-[3]" />
+                      </div>
+                    )}
                   </div>
-                  <div className="flex items-center gap-2 text-sm text-on-surface-variant">
-                    <span className="font-mono">👥</span>
-                    <span>{experience.capacity}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-on-surface-variant">
-                    <span className="font-mono">➕</span>
-                    <span>Extra Hour: {experience.extraHour}</span>
-                  </div>
-                </div>
 
-                <div className="border-t border-glass-stroke pt-4">
-                  <p className="font-mono text-xs text-on-surface-variant mb-2 uppercase tracking-wider">Includes</p>
-                  <ul className="space-y-1">
-                    {experience.features.map((feature, index) => (
-                      <li key={index} className="font-body text-sm text-on-surface-variant flex items-center gap-2">
-                        <span className="text-primary">✓</span>
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </Card>
-            ))}
+                  <h3 className="font-sans text-[20px] font-bold text-white mb-2 group-hover:text-primary transition-colors">
+                    {exp.title}
+                  </h3>
+                  
+                  <p className="font-body text-[14px] text-on-surface-variant mb-4 leading-relaxed line-clamp-3">
+                    {exp.description}
+                  </p>
+
+                  <div className="flex items-baseline gap-1 mb-4 border-b border-glass-stroke pb-3">
+                    <span className="font-mono text-xl font-bold text-primary">{exp.price}</span>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-y-2 gap-x-1.5 text-xs text-on-surface-variant mb-6 font-medium">
+                    <div className="flex items-center gap-1.5">
+                      <Clock className="w-3.5 h-3.5 text-primary shrink-0" />
+                      <span>{exp.duration}</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <User className="w-3.5 h-3.5 text-primary shrink-0" />
+                      <span>{exp.capacity}</span>
+                    </div>
+                  </div>
+
+                  {/* Feature Checks */}
+                  <div className="mt-auto border-t border-glass-stroke/50 pt-4">
+                    <ul className="space-y-1.5">
+                      {exp.features.map((feature, i) => (
+                        <li key={i} className="font-body text-[12px] text-on-surface-variant flex items-start gap-1.5">
+                          <Check className="w-3.5 h-3.5 text-primary shrink-0 mt-0.5" />
+                          <span>{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </Card>
+              );
+            })}
           </div>
 
-          {/* Action Buttons */}
-          <div className="flex justify-center gap-4 mt-12">
+          {/* Floating Actions */}
+          <div className="flex justify-center gap-4 mt-16">
             <Link href="/">
-              <Button variant="secondary">Back</Button>
+              <Button variant="secondary" size="lg">Back Home</Button>
             </Link>
             <Button 
               size="lg" 
               onClick={handleContinue}
               disabled={!selectedExperience}
-              className={!selectedExperience ? 'opacity-50 cursor-not-allowed' : ''}
+              variant={selectedExperience ? 'primary' : 'secondary'}
+              className={!selectedExperience ? 'opacity-40 cursor-not-allowed' : ''}
             >
-              Continue to Date Selection
+              Continue to Time Slots
             </Button>
           </div>
         </section>
