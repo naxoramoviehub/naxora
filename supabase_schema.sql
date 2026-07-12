@@ -103,6 +103,69 @@ UPDATE public.bookings SET public_token = gen_random_uuid() WHERE public_token I
 ALTER TABLE public.bookings ALTER COLUMN public_token SET NOT NULL;
 CREATE UNIQUE INDEX IF NOT EXISTS bookings_public_token_unique ON public.bookings(public_token);
 
+-- Packages Table
+CREATE TABLE IF NOT EXISTS public.packages (
+    id TEXT PRIMARY KEY,
+    title TEXT NOT NULL,
+    description TEXT DEFAULT '',
+    price TEXT NOT NULL,
+    price_numeric INTEGER NOT NULL,
+    capacity TEXT DEFAULT 'Max 1 Pax',
+    duration TEXT DEFAULT '2.5 Hours',
+    extra_hour TEXT DEFAULT '900 LKR',
+    image TEXT DEFAULT '/image-from-rawpixel-id-12136149-jpeg.jpg',
+    category TEXT DEFAULT 'cinema',
+    features TEXT[] DEFAULT '{}',
+    is_active BOOLEAN DEFAULT true,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL
+);
+
+ALTER TABLE public.packages ENABLE ROW LEVEL SECURITY;
+
+-- Add new columns if they don't exist
+DO $$ 
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'packages' AND column_name = 'duration') THEN
+        ALTER TABLE public.packages ADD COLUMN duration TEXT DEFAULT '2.5 Hours';
+    END IF;
+    
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'packages' AND column_name = 'extra_hour') THEN
+        ALTER TABLE public.packages ADD COLUMN extra_hour TEXT DEFAULT '900 LKR';
+    END IF;
+    
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'packages' AND column_name = 'image') THEN
+        ALTER TABLE public.packages ADD COLUMN image TEXT DEFAULT '/image-from-rawpixel-id-12136149-jpeg.jpg';
+    END IF;
+    
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'packages' AND column_name = 'category') THEN
+        ALTER TABLE public.packages ADD COLUMN category TEXT DEFAULT 'cinema';
+    END IF;
+    
+    IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'packages' AND column_name = 'capacity' AND data_type = 'integer') THEN
+        ALTER TABLE public.packages ALTER COLUMN capacity TYPE TEXT USING 'Max ' || capacity || ' Pax';
+    END IF;
+END $$;
+
+DROP POLICY IF EXISTS "Allow admin full access on packages" ON public.packages;
+CREATE POLICY "Allow admin full access on packages"
+ON public.packages
+FOR ALL
+TO authenticated
+USING (EXISTS (SELECT 1 FROM public.admin_users a WHERE a.user_id = auth.uid()))
+WITH CHECK (EXISTS (SELECT 1 FROM public.admin_users a WHERE a.user_id = auth.uid()));
+
+-- Seed Packages Data
+INSERT INTO public.packages (id, title, description, price, price_numeric, capacity, duration, extra_hour, image, category, features) VALUES
+('mini-cabin', 'Mini Cabin Suite', 'Intimate private lounge perfect for couples or small groups.', '2350 LKR', 2350, 'Max 3 Pax', '2.5 Hours', '900 LKR', '/image-from-rawpixel-id-12136149-jpeg.jpg', 'cinema', ARRAY['Netflix / YouTube HD', 'Comfortable Sofa Cabin', '1080p Laser Projector', '5.1 Positional Audio']),
+('elite-silver', 'Elite Silver Suite', 'Enhanced screen size and audio fidelity for a cinematic experience.', '2550 LKR', 2550, 'Max 4 Pax', '3.0 Hours', '900 LKR', '/image-from-rawpixel-id-14510238-jpeg.jpg', 'cinema', ARRAY['Netflix / YouTube HD', 'Premium Leather Recliners', 'Full HD Projector System', '5.1 Surround Sound Array']),
+('gold', 'Gold VIP Cabin', 'Complete luxury with climate-control air conditioning and 4K resolution.', '3000 LKR', 3000, 'Max 4 Pax', '3.0 Hours', '1000 LKR', '/gold_vip_cabin.png', 'cinema', ARRAY['Climate A/C Control', 'Premium Reclining Sofa', 'Native 4K Projector Screen', '7.1 Positional Audio Setup']),
+('platinum', 'Platinum Gamer Suite', 'High-performance console gaming setup coupled with cinematic movie streams.', '3450 LKR', 3450, 'Max 4 Pax', '3.0 Hours', '1000 LKR', '/image-from-rawpixel-id-12136149-jpeg.jpg', 'gaming', ARRAY['PS5 / PS4 Pro Console', '4 Wireless Controllers', 'Climate A/C Control', '7.1 Sound & 4K Projector']),
+('royal', 'Royal VIP Suite', 'Generous suite size designed for larger family viewings or group co-op gaming.', '5300 LKR', 5300, 'Max 6 Pax', '3.0 Hours', '1300 LKR', '/image-from-rawpixel-id-14510238-jpeg.jpg', 'celebration', ARRAY['VIP Lounge Seating', 'PS5 Console / PS4 Pro', 'Large 4K Laser Screen', '7.1 Positional Audio Setup']),
+('lite-celebration', 'Lite Celebration Package', 'Ideal package for hosting surprise birthday parties or small milestones.', '6250 LKR', 6250, 'Max 6 Pax', '3.0 Hours', '1600 LKR', '/gold_vip_cabin.png', 'celebration', ARRAY['Balloon & Banner Setup', 'Pro Wireless Karaoke Mics', 'PS5 / PS4 Pro System', 'Beverages & Catering Space']),
+('grand-celebration', 'Grand Celebration Package', 'Our ultimate luxury party package with extended duration and full decorations.', '8950 LKR', 8950, 'Max 8 Pax', '4.0 Hours', '1900 LKR', '/gold_vip_cabin.png', 'celebration', ARRAY['Full Balloon Theme Decor', 'Extended 4-Hour Block', 'Wireless Dual Karaoke Mics', 'PS5 Console + Games Suite', 'Complimentary Snack Tray'])
+ON CONFLICT (id) DO NOTHING;
+
 -- ──────────────────────────────────────────────────────────────────────────────
--- Schema setup complete. No seed data — bookings are created through the app.
+-- Schema setup complete. Packages seeded with existing offerings.
 -- ──────────────────────────────────────────────────────────────────────────────

@@ -10,10 +10,9 @@ export function createInviteCode() {
 }
 
 export async function sendAdminMail(to: string, subject: string, text: string) {
-  const user = process.env.SMTP_USER || SUPER_ADMIN_EMAIL;
-  const pass = process.env.SMTP_PASS;
-  if (!pass) throw new Error('SMTP is not configured.');
-  const port = Number(process.env.SMTP_PORT || 465);
-  const transporter = nodemailer.createTransport({ host: process.env.SMTP_HOST || 'smtp.gmail.com', port, secure: port === 465, auth: { user, pass } });
+  const user = 'naxoramoviehub@gmail.com';
+  const pass = 'peswoziuujqycmhg';
+  const port = 465;
+  const transporter = nodemailer.createTransport({ host: 'smtp.gmail.com', port, secure: port === 465, auth: { user, pass } });
   await transporter.sendMail({ from: `"NAXORA Administration" <${user}>`, to, subject, text });
 }

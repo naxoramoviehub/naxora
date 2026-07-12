@@ -9,6 +9,7 @@ import Footer from '@/components/layout/Footer';
 import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
+import Dialog from '@/components/ui/Dialog';
 import { 
   Calendar as CalendarIcon, Clock, User, Check, AlertCircle, ArrowLeft, 
   Copy, ExternalLink, MessageSquare, DollarSign, CheckCircle2, ChevronLeft, ChevronRight,
@@ -44,6 +45,22 @@ function BookingFormContent() {
   // Persisted Countdown hold timer
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
   const [timerExpired, setTimerExpired] = useState(false);
+  
+  // Dialog state
+  const [dialog, setDialog] = useState<{
+    isOpen: boolean;
+    type: 'confirm' | 'alert' | 'success';
+    title: string;
+    message: string;
+    onConfirm?: () => void;
+    confirmText?: string;
+    cancelText?: string;
+  }>({
+    isOpen: false,
+    type: 'alert',
+    title: '',
+    message: ''
+  });
 
   // Month navigation for custom calendar
   const [currentDate, setCurrentDate] = useState<Date>(new Date('2026-06-27'));
@@ -211,7 +228,13 @@ function BookingFormContent() {
       setStep(4);
     } catch (err) {
       console.error(err);
-      alert('Error creating booking request. Please try again.');
+      setDialog({
+        isOpen: true,
+        type: 'alert',
+        title: 'Error',
+        message: 'Error creating booking request. Please try again.',
+        confirmText: 'OK'
+      });
     }
   };
 
@@ -225,7 +248,13 @@ function BookingFormContent() {
   // Copy text helper
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
-    alert('Copied to clipboard!');
+    setDialog({
+      isOpen: true,
+      type: 'success',
+      title: 'Copied',
+      message: 'Copied to clipboard!',
+      confirmText: 'OK'
+    });
   };
 
   // Generate WhatsApp message and send booking receipt email
@@ -252,7 +281,13 @@ I have attached the screenshot of the bank transfer transaction receipt below. P
     if (pngBlob) {
       try {
         navigator.clipboard.write([new ClipboardItem({ 'image/png': pngBlob })]);
-        alert('Receipt image copied to clipboard! Once WhatsApp opens, press Ctrl+V (or tap Paste) in the chat to attach it.');
+        setDialog({
+          isOpen: true,
+          type: 'success',
+          title: 'Receipt Copied',
+          message: 'Receipt image copied to clipboard! Once WhatsApp opens, press Ctrl+V (or tap Paste) in the chat to attach it.',
+          confirmText: 'OK'
+        });
       } catch (err) {
         console.error('Failed to copy receipt to clipboard:', err);
       }
@@ -299,7 +334,13 @@ I have attached the screenshot of the bank transfer transaction receipt below. P
     if (!file) return;
 
     if (file.size > 4 * 1024 * 1024) {
-      alert('File size exceeds the 4MB limit.');
+      setDialog({
+        isOpen: true,
+        type: 'alert',
+        title: 'File Too Large',
+        message: 'File size exceeds the 4MB limit.',
+        confirmText: 'OK'
+      });
       return;
     }
 
@@ -347,11 +388,23 @@ I have attached the screenshot of the bank transfer transaction receipt below. P
         setReceiptUploaded(true);
         setCreatedBooking(updated);
       } else {
-        alert('Failed to upload receipt. Please try again.');
+        setDialog({
+          isOpen: true,
+          type: 'alert',
+          title: 'Upload Failed',
+          message: 'Failed to upload receipt. Please try again.',
+          confirmText: 'OK'
+        });
       }
     } catch (err) {
       console.error(err);
-      alert('Error uploading receipt. Please try again.');
+      setDialog({
+        isOpen: true,
+        type: 'alert',
+        title: 'Upload Error',
+        message: 'Error uploading receipt. Please try again.',
+        confirmText: 'OK'
+      });
     } finally {
       setUploadingReceipt(false);
     }
@@ -926,6 +979,18 @@ I have attached the screenshot of the bank transfer transaction receipt below. P
           )}
         </section>
       </main>
+
+      {/* Custom Dialog */}
+      <Dialog
+        isOpen={dialog.isOpen}
+        onClose={() => setDialog({ ...dialog, isOpen: false })}
+        title={dialog.title}
+        message={dialog.message}
+        type={dialog.type}
+        onConfirm={dialog.onConfirm}
+        confirmText={dialog.confirmText}
+        cancelText={dialog.cancelText}
+      />
 
       <Footer />
     </div>

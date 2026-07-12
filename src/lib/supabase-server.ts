@@ -4,8 +4,8 @@ import { createClient } from '@supabase/supabase-js';
 import { cookies } from 'next/headers';
 
 function config() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const url = 'https://bvhxakhywkowbhesjlmo.supabase.co';
+  const key = 'sb_publishable_5HLja_22yuBy1psIjTVOOA_rS9f5jNC';
   if (!url || !key) throw new Error('Supabase public environment variables are not configured.');
   return { url, key };
 }
@@ -24,8 +24,8 @@ export async function createSupabaseServerClient() {
 }
 
 export function createSupabaseAdminClient() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const url = 'https://bvhxakhywkowbhesjlmo.supabase.co';
+  const key = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ2aHhha2h5d2tvd2JoZXNqbG1vIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MjU2Mjc4OSwiZXhwIjoyMDk4MTM4Nzg5fQ.-RKAfS1KYDnaFomMOEbPkTRPWfJNdsMYHnLmGAUilqg';
   if (!url || !key) throw new Error('Supabase service-role environment variables are not configured.');
   return createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -9,6 +9,7 @@ import Footer from '@/components/layout/Footer';
 import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
+import { getPackages, Package } from '@/lib/database';
 import { 
   Sparkles, Calendar, User, Clock, Check, Tv, Volume2, Film, 
   Gamepad2, Cpu, Monitor, Trophy, Laptop, UtensilsCrossed, 
@@ -18,100 +19,33 @@ import {
 export default function PackagesPage() {
   const router = useRouter();
   const [activeCategory, setActiveCategory] = useState<'all' | 'cinema' | 'gaming' | 'celebration'>('all');
+  const [packages, setPackages] = useState<Package[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const experiences = [
-    {
-      id: 'mini-cabin',
-      title: 'Mini Cabin Suite',
-      description: 'Intimate private lounge perfect for couples or small groups.',
-      price: '2350 LKR',
-      duration: '2.5 Hours',
-      capacity: 'Max 3 Pax',
-      extraHour: '900 LKR',
-      image: '/image-from-rawpixel-id-12136149-jpeg.jpg',
-      category: 'cinema',
-      categoryLabel: 'Cinema',
-      features: ['Netflix / YouTube HD', 'Comfortable Sofa Cabin', '1080p Laser Projector', '5.1 Positional Audio']
-    },
-    {
-      id: 'elite-silver',
-      title: 'Elite Silver Suite',
-      description: 'Enhanced screen size and audio fidelity for a cinematic experience.',
-      price: '2550 LKR',
-      duration: '3.0 Hours',
-      capacity: 'Max 4 Pax',
-      extraHour: '900 LKR',
-      image: '/image-from-rawpixel-id-14510238-jpeg.jpg',
-      category: 'cinema',
-      categoryLabel: 'Cinema',
-      features: ['Netflix / YouTube HD', 'Premium Leather Recliners', 'Full HD Projector System', '5.1 Surround Sound Array']
-    },
-    {
-      id: 'gold',
-      title: 'Gold VIP Cabin',
-      description: 'Complete luxury with climate-control air conditioning and 4K resolution.',
-      price: '3000 LKR',
-      duration: '3.0 Hours',
-      capacity: 'Max 4 Pax',
-      extraHour: '1000 LKR',
-      image: '/gold_vip_cabin.png',
-      category: 'cinema',
-      categoryLabel: 'Cinema & Gaming',
-      features: ['Climate A/C Control', 'Premium Reclining Sofa', 'Native 4K Projector Screen', '7.1 Positional Audio Setup']
-    },
-    {
-      id: 'platinum',
-      title: 'Platinum Gamer Suite',
-      description: 'High-performance console gaming setup coupled with cinematic movie streams.',
-      price: '3450 LKR',
-      duration: '3.0 Hours',
-      capacity: 'Max 4 Pax',
-      extraHour: '1000 LKR',
-      image: '/image-from-rawpixel-id-12136149-jpeg.jpg',
-      category: 'gaming',
-      categoryLabel: 'Gaming Focus',
-      features: ['PS5 / PS4 Pro Console', '4 Wireless Controllers', 'Climate A/C Control', '7.1 Sound & 4K Projector']
-    },
-    {
-      id: 'royal',
-      title: 'Royal VIP Suite',
-      description: 'Generous suite size designed for larger family viewings or group co-op gaming.',
-      price: '5300 LKR',
-      duration: '3.0 Hours',
-      capacity: 'Max 6 Pax',
-      extraHour: '1300 LKR',
-      image: '/image-from-rawpixel-id-14510238-jpeg.jpg',
-      category: 'celebration',
-      categoryLabel: 'Celebration VIP',
-      features: ['VIP Lounge Seating', 'PS5 Console / PS4 Pro', 'Large 4K Laser Screen', '7.1 Positional Audio Setup']
-    },
-    {
-      id: 'lite-celebration',
-      title: 'Lite Celebration Package',
-      description: 'Ideal package for hosting surprise birthday parties or small milestones.',
-      price: '6250 LKR',
-      duration: '3.0 Hours',
-      capacity: 'Max 6 Pax',
-      extraHour: '1600 LKR',
-      image: '/gold_vip_cabin.png',
-      category: 'celebration',
-      categoryLabel: 'Celebration Focus',
-      features: ['Balloon & Banner Setup', 'Pro Wireless Karaoke Mics', 'PS5 / PS4 Pro System', 'Beverages & Catering Space']
-    },
-    {
-      id: 'grand-celebration',
-      title: 'Grand Celebration Package',
-      description: 'Our ultimate luxury party package with extended duration and full decorations.',
-      price: '8950 LKR',
-      duration: '4.0 Hours',
-      capacity: 'Max 8 Pax',
-      extraHour: '1900 LKR',
-      image: '/gold_vip_cabin.png',
-      category: 'celebration',
-      categoryLabel: 'Celebration Focus',
-      features: ['Full Balloon Theme Decor', 'Extended 4-Hour Block', 'Wireless Dual Karaoke Mics', 'PS5 Console + Games Suite', 'Complimentary Snack Tray']
-    }
-  ];
+  useEffect(() => {
+    loadPackages();
+  }, []);
+
+  const loadPackages = async () => {
+    setLoading(true);
+    const data = await getPackages();
+    setPackages(data);
+    setLoading(false);
+  };
+
+  const experiences = packages.map(pkg => ({
+    id: pkg.id,
+    title: pkg.title,
+    description: pkg.description,
+    price: pkg.price,
+    duration: pkg.duration,
+    capacity: pkg.capacity,
+    extraHour: pkg.extra_hour || 'N/A',
+    image: pkg.image || '/image-from-rawpixel-id-12136149-jpeg.jpg',
+    category: pkg.category,
+    categoryLabel: pkg.category.charAt(0).toUpperCase() + pkg.category.slice(1),
+    features: pkg.features || []
+  }));
 
   const services = [
     {
