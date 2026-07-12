@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { createSupabaseAdminClient } from '@/lib/supabase-server';
 import { getExperience, formatLkr } from '@/lib/packages';
 import { rateLimit, requestKey } from '@/lib/rate-limit';
+import { sendAdminBookingNotification } from '@/lib/email';
 
 const schema = z.object({
   customer_name: z.string().trim().min(2).max(80), customer_email: z.string().email().max(160),
@@ -26,6 +27,14 @@ export async function POST(request: Request) {
   const { data, error } = await db.from('bookings').insert({ ...parsed.data, id, package_title: experience.title, booking_time_display: slot, amount_due: formatLkr(experience.price), status: 'pending' }).select().single();
   if (error?.code === '23505') return NextResponse.json({ error: 'That time was just reserved. Please choose another slot.' }, { status: 409 });
   if (error) return NextResponse.json({ error: 'Could not create the booking.' }, { status: 500 });
+  
+  // Send admin notification email
+  try {
+    await sendAdminBookingNotification(data);
+  } catch (emailError) {
+    console.error('Failed to send admin notification email:', emailError);
+  }
+  
   return NextResponse.json({ booking: data }, { status: 201 });
 }
 

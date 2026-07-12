@@ -106,6 +106,8 @@ export async function createBooking(bookingData: Omit<Booking, 'id' | 'status' |
 }
 
 export async function updateBookingStatus(id: string, status: 'pending' | 'confirmed' | 'cancelled'): Promise<Booking | null> {
+  let booking: Booking | null = null;
+  
   if (supabase) {
     try {
       const { data, error } = await supabase
@@ -115,22 +117,41 @@ export async function updateBookingStatus(id: string, status: 'pending' | 'confi
         .select()
         .single();
       if (error) throw error;
-      return data;
+      booking = data;
     } catch (err) {
       console.error('Supabase updateBookingStatus failed, falling back:', err);
     }
   }
 
-  const bookings = await getBookings();
-  const index = bookings.findIndex(b => b.id === id);
-  if (index !== -1) {
-    bookings[index].status = status;
-    if (typeof window !== 'undefined') {
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(bookings));
+  if (!booking) {
+    const bookings = await getBookings();
+    const index = bookings.findIndex(b => b.id === id);
+    if (index !== -1) {
+      bookings[index].status = status;
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(bookings));
+      }
+      booking = bookings[index];
     }
-    return bookings[index];
   }
-  return null;
+
+  // Send email notification for status changes
+  if (booking && (status === 'confirmed' || status === 'cancelled')) {
+    try {
+      await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          booking,
+          status
+        })
+      });
+    } catch (err) {
+      console.error('Failed to send email notification:', err);
+    }
+  }
+
+  return booking;
 }
 
 export async function deleteBooking(id: string): Promise<boolean> {
