@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
+import { requireAdmin } from '@/lib/supabase-server';
 
 export async function POST(req: NextRequest) {
-  console.log('[API] /api/confirm-booking hit');
+  if (!await requireAdmin()) return NextResponse.json({ error: 'Unauthorized.' }, { status: 401 });
   try {
     const body = await req.json();
-    console.log('[API] /api/confirm-booking payload:', JSON.stringify(body, null, 2));
     const {
       bookingId,
       customerName,

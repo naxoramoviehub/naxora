@@ -16,6 +16,7 @@ export interface Booking {
   receipt_url?: string;          // Base64 encoded receipt image
   receipt_filename?: string;     // Original filename of the uploaded receipt
   amount_due?: string;           // Package price string (e.g. '2350 LKR')
+  public_token?: string;
 }
 
 // Hardcoded time slots for high-fidelity booking experience
@@ -27,12 +28,6 @@ export const TIME_SLOTS = [
 ];
 
 const LOCAL_STORAGE_KEY = 'naxora_bookings';
-
-// Generate a random premium-looking Booking ID (e.g. NX-4821)
-function generateBookingId(): string {
-  const num = Math.floor(1000 + Math.random() * 9000);
-  return `NX-${num}`;
-}
 
 export async function getBookings(): Promise<Booking[]> {
   if (supabase) {
@@ -77,33 +72,10 @@ export async function getBookingById(id: string): Promise<Booking | null> {
 }
 
 export async function createBooking(bookingData: Omit<Booking, 'id' | 'status' | 'created_at'>): Promise<Booking> {
-  const newBooking: Booking = {
-    ...bookingData,
-    id: generateBookingId(),
-    status: 'pending',
-    created_at: new Date().toISOString()
-  };
-
-  if (supabase) {
-    try {
-      const { data, error } = await supabase
-        .from('bookings')
-        .insert([newBooking])
-        .select()
-        .single();
-      if (error) throw error;
-      return data || newBooking;
-    } catch (err) {
-      console.error('Supabase createBooking failed, falling back:', err);
-    }
-  }
-
-  const bookings = await getBookings();
-  const updatedBookings = [newBooking, ...bookings];
-  if (typeof window !== 'undefined') {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedBookings));
-  }
-  return newBooking;
+  const response = await fetch('/api/bookings', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(bookingData) });
+  const result = await response.json();
+  if (!response.ok) throw new Error(result.error || 'Could not create booking.');
+  return result.booking;
 }
 
 export async function updateBookingStatus(id: string, status: 'pending' | 'confirmed' | 'cancelled'): Promise<Booking | null> {
@@ -157,11 +129,9 @@ export async function deleteBooking(id: string): Promise<boolean> {
 }
 
 export async function getBookedSlots(date: string, experienceId: string): Promise<{ time: string; status: Booking['status'] }[]> {
-  const bookings = await getBookings();
-  // Filter bookings for this date and cabin category (experiences share capacity, e.g. booking experienceId specifically)
-  return bookings
-    .filter(b => b.booking_date === date && b.experience_id === experienceId && b.status !== 'cancelled')
-    .map(b => ({ time: b.booking_time, status: b.status }));
+  const response = await fetch(`/api/bookings?date=${encodeURIComponent(date)}&experience=${encodeURIComponent(experienceId)}`);
+  if (!response.ok) return [];
+  return (await response.json()).slots;
 }
 
 export interface ReceiptMetadata {
@@ -172,7 +142,12 @@ export interface ReceiptMetadata {
   amountDue?: string;
 }
 
-export async function uploadBookingReceipt(id: string, meta: ReceiptMetadata): Promise<Booking | null> {
+export async function uploadBookingReceipt(id: string, meta: ReceiptMetadata, publicToken?: string): Promise<Booking | null> {
+  if (publicToken) {
+    const response = await fetch('/api/bookings/receipt', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id, public_token: publicToken, ...meta }) });
+    if (!response.ok) return null;
+    return (await response.json()).booking;
+  }
   const updatePayload: Partial<Booking> = {
     receipt_url: meta.receiptBase64,
     receipt_filename: meta.receiptFilename || '',

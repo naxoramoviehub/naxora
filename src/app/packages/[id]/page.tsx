@@ -289,7 +289,7 @@ I have attached the screenshot of the bank transfer transaction receipt below. P
         packageTitle: experience.title,
         bookingTimeDisplay: timeDisplay,
         amountDue: experience.price,
-      }).catch(err => console.error('Supabase receipt save failed:', err));
+      }, snap.public_token).catch(err => console.error('Supabase receipt save failed:', err));
     }
   };
 
@@ -342,7 +342,7 @@ I have attached the screenshot of the bank transfer transaction receipt below. P
         packageTitle: experience?.title || '',
         bookingTimeDisplay: TIME_SLOTS.find(ts => ts.time === createdBooking.booking_time)?.display || createdBooking.booking_time,
         amountDue: experience?.price || '',
-      });
+      }, createdBooking.public_token);
       if (updated) {
         setReceiptUploaded(true);
         setCreatedBooking(updated);

@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
@@ -14,6 +13,8 @@ export default function Header() {
 
   const navLinks = [
     { href: '/packages', label: 'Packages' },
+    { href: '/about', label: 'About' },
+    { href: '/contact', label: 'Contact' },
   ];
 
   return (
@@ -60,6 +61,8 @@ export default function Header() {
             className="md:hidden text-on-surface-variant hover:text-white transition-colors cursor-pointer p-1"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle menu"
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-navigation"
           >
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -86,6 +89,7 @@ export default function Header() {
               exit={{ x: '100%' }}
               transition={{ type: 'tween', duration: 0.3 }}
               className="fixed right-0 top-20 bottom-0 w-[280px] z-50 bg-secondary border-l border-glass-stroke p-6 md:hidden flex flex-col justify-between"
+              id="mobile-navigation"
             >
               <div className="flex flex-col space-y-6">
                 {navLinks.map((link) => {
@@ -110,11 +114,6 @@ export default function Header() {
                 <Link href="/packages" onClick={() => setMobileMenuOpen(false)}>
                   <Button variant="primary" className="w-full">
                     Book Experience
-                  </Button>
-                </Link>
-                <Link href="/admin" onClick={() => setMobileMenuOpen(false)}>
-                  <Button variant="secondary" className="w-full">
-                    Admin Portal
                   </Button>
                 </Link>
               </div>

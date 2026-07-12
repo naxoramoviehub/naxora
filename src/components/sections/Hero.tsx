@@ -5,7 +5,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import Button from '@/components/ui/Button';
-import Badge from '@/components/ui/Badge';
 import { ChevronDown } from 'lucide-react';
 
 export default function Hero() {
@@ -33,7 +32,7 @@ export default function Hero() {
             src="/Hero_image.png"
             alt="NAXORA Luxury Private Screenings"
             fill
-            sizes="100vw"
+            sizes="(min-width: 1024px) 67vw, 100vw"
             priority
             className="object-cover object-right md:object-center opacity-65"
           />
@@ -132,7 +131,9 @@ export default function Hero() {
         animate={{ opacity: [0, 1, 0] }}
         transition={{ duration: 2.5, repeat: Infinity }}
         className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 hidden md:flex flex-col items-center gap-2 cursor-pointer"
+        role="button" tabIndex={0} aria-label="Scroll to featured experiences"
         onClick={() => window.scrollTo({ top: window.innerHeight * 0.9, behavior: 'smooth' })}
+        onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') window.scrollTo({ top: window.innerHeight * 0.9, behavior: 'smooth' }); }}
       >
         <span className="font-mono text-xs uppercase tracking-widest text-on-surface-variant">Scroll down</span>
         <ChevronDown className="w-5 h-5 text-on-surface-variant animate-bounce" />

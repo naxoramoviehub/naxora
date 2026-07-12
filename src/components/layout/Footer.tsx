@@ -1,8 +1,4 @@
-'use client';
-
 import Link from 'next/link';
-import { Facebook, Instagram, Youtube, Send } from 'lucide-react';
-import Button from '@/components/ui/Button';
 
 export default function Footer() {
   return (
@@ -17,18 +13,7 @@ export default function Footer() {
             <p className="font-body text-[16px] text-on-surface-variant mb-6 max-w-sm leading-relaxed">
               Premium private cinema and gaming experiences custom-tailored for the discerning entertainment enthusiast. Enjoy unparalleled luxury, technology, and service.
             </p>
-            {/* Social Icons */}
-            <div className="flex items-center space-x-4">
-              <a href="#" className="w-10 h-10 rounded-full border border-glass-stroke flex items-center justify-center text-on-surface-variant hover:text-white hover:border-primary/50 hover:bg-primary/5 transition-all">
-                <Instagram className="w-4 h-4" />
-              </a>
-              <a href="#" className="w-10 h-10 rounded-full border border-glass-stroke flex items-center justify-center text-on-surface-variant hover:text-white hover:border-primary/50 hover:bg-primary/5 transition-all">
-                <Facebook className="w-4 h-4" />
-              </a>
-              <a href="#" className="w-10 h-10 rounded-full border border-glass-stroke flex items-center justify-center text-on-surface-variant hover:text-white hover:border-primary/50 hover:bg-primary/5 transition-all">
-                <Youtube className="w-4 h-4" />
-              </a>
-            </div>
+            <a href="https://wa.me/94707735599" target="_blank" rel="noreferrer" className="inline-flex rounded-xl border border-primary/30 px-4 py-2 text-sm font-bold text-primary hover:bg-primary/10">Chat on WhatsApp</a>
           </div>
 
           {/* Quick Links Column 1 */}
@@ -75,23 +60,13 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Newsletter / Custom Field */}
+          {/* Contact */}
           <div>
-            <h4 className="font-sans text-[15px] font-bold text-white uppercase tracking-wider mb-5">Stay Updated</h4>
+            <h4 className="font-sans text-[15px] font-bold text-white uppercase tracking-wider mb-5">Plan a visit</h4>
             <p className="font-body text-[14px] text-on-surface-variant mb-4 leading-relaxed">
-              Subscribe to receive updates about new screenings, tournaments, and exclusive offers.
+              Open daily with four reservable sessions. Contact our team for location details, accessibility needs, or custom events.
             </p>
-            <form onSubmit={(e) => e.preventDefault()} className="flex gap-2">
-              <input
-                type="email"
-                placeholder="Your email"
-                className="flex-1 px-4 py-2.5 bg-surface-container border border-glass-stroke rounded-lg text-sm text-white focus:outline-none focus:border-primary/50 placeholder:text-muted"
-                required
-              />
-              <Button type="submit" variant="primary" className="!px-3 !py-2.5">
-                <Send className="w-4 h-4" />
-              </Button>
-            </form>
+            <a href="mailto:naxoramovihub@gmail.com" className="text-sm text-primary hover:underline">naxoramovihub@gmail.com</a>
           </div>
         </div>
 

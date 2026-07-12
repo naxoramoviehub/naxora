@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
+import { createBrowserClient } from '@supabase/ssr';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 // Support both the legacy anon key name and the newer publishable key name
@@ -9,5 +9,5 @@ const supabaseKey =
 
 export const supabase =
   supabaseUrl && supabaseKey
-    ? createClient(supabaseUrl, supabaseKey)
+    ? createBrowserClient(supabaseUrl, supabaseKey)
     : null;

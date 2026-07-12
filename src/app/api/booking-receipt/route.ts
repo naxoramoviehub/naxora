@@ -1,9 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
+import { z } from 'zod';
+import { rateLimit, requestKey } from '@/lib/rate-limit';
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
+    if (!rateLimit(requestKey(req, 'receipt-email'), 4, 10 * 60_000)) return NextResponse.json({ error: 'Too many requests.' }, { status: 429 });
+    const parsed = z.object({ bookingId:z.string().max(32), customerName:z.string().max(80), customerEmail:z.string().email().max(160), customerPhone:z.string().max(24).optional(), packageTitle:z.string().max(100), bookingDate:z.string().date(), bookingTime:z.string().max(60), capacity:z.union([z.string(),z.number()]), amountDue:z.union([z.string(),z.number()]), receiptBase64:z.string().max(4_000_000).nullable().optional(), receiptFileName:z.string().max(120).nullable().optional() }).safeParse(await req.json().catch(() => null));
+    if (!parsed.success) return NextResponse.json({ error: 'Invalid receipt details.' }, { status: 400 });
+    const body = parsed.data;
     const {
       bookingId,
       customerName,

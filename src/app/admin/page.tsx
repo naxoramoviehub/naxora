@@ -15,6 +15,7 @@ import {
   TrendingUp, Users, DollarSign, Clock, LayoutDashboard, Settings,
   AlertCircle, ChevronLeft, ChevronRight, Edit2, CheckCircle2, Eye
 } from 'lucide-react';
+import { signOut } from '@/app/admin/auth/actions';
 
 export default function AdminDashboardPage() {
   const [bookings, setBookings] = useState<Booking[]>([]);
@@ -283,6 +284,7 @@ export default function AdminDashboardPage() {
       <Header />
       
       <main className="flex-1 pt-24 pb-16 px-5 md:px-[80px] max-w-[1440px] mx-auto w-full">
+        <div className="mb-4 flex flex-wrap justify-end gap-3"><Link href="/admin/invites" className="rounded-lg border border-primary/30 px-4 py-2 text-sm text-primary">Admin requests</Link><Link href="/admin/admins" className="rounded-lg border border-primary/30 px-4 py-2 text-sm text-primary">Manage admins</Link><form action={signOut}><button className="rounded-lg border border-glass-stroke px-4 py-2 text-sm text-on-surface-variant hover:text-white">Sign out</button></form></div>
         {/* Dashboard Title */}
         <section className="mb-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>

@@ -21,8 +21,12 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "NAXORA | Premium Entertainment Experience",
-  description: "Luxury private cinema and gaming experiences",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
+  title: { default: "NAXORA | Private Cinema, Gaming & Celebrations", template: "%s | NAXORA" },
+  description: "Book private cinema cabins, gaming suites and curated celebrations in Sri Lanka.",
+  openGraph: { title: 'NAXORA Private Entertainment', description: 'Private cinema, gaming and celebrations in Sri Lanka.', images: ['/Hero_image.png'], type: 'website' },
+  twitter: { card: 'summary_large_image', images: ['/Hero_image.png'] },
+  alternates: { canonical: '/' },
 };
 
 export const viewport: Viewport = {
@@ -41,7 +45,7 @@ export default function RootLayout({
       className={`${sora.variable} ${hankenGrotesk.variable} ${jetbrainsMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col" suppressHydrationWarning>{children}</body>
+      <body className="min-h-full flex flex-col" suppressHydrationWarning><a href="#main-content" className="skip-link">Skip to content</a>{children}</body>
     </html>
   );
 }

@@ -103,9 +103,15 @@ export default function Home() {
     <div className="flex flex-col min-h-screen bg-background text-on-background">
       <Header />
       
-      <main className="flex-1">
+      <main id="main-content" className="flex-1">
         {/* Hero Section */}
         <Hero />
+
+        <section aria-label="Why choose NAXORA" className="relative z-10 border-y border-glass-stroke bg-surface-container-lowest/50 px-5 py-10 md:px-20">
+          <div className="mx-auto grid max-w-[1200px] gap-6 text-center sm:grid-cols-2 lg:grid-cols-4">
+            {[['Private by design','Sound-conscious cabins reserved only for your group.'],['Clear pricing','Upfront package pricing with no surprise booking fees.'],['Flexible occasions','Movie nights, gaming sessions and milestone celebrations.'],['Human support','Coordinate details directly with our team on WhatsApp.']].map(([title,copy]) => <div key={title}><h2 className="mb-2 font-sans text-lg font-bold text-white">{title}</h2><p className="text-sm leading-relaxed text-on-surface-variant">{copy}</p></div>)}
+          </div>
+        </section>
 
         {/* Featured Experiences */}
         <section className="py-24 px-5 md:px-[80px] max-w-[1440px] mx-auto z-10 relative overflow-hidden">

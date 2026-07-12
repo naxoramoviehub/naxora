@@ -1,9 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
+import { z } from 'zod';
+import { rateLimit, requestKey } from '@/lib/rate-limit';
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
+    if (!rateLimit(requestKey(req, 'contact'), 5, 10 * 60_000)) return NextResponse.json({ error: 'Too many messages. Please try later.' }, { status: 429 });
+    const parsed = z.object({ name:z.string().trim().min(2).max(80), email:z.string().email().max(160), phone:z.string().max(24).optional(), subject:z.string().trim().min(2).max(120), message:z.string().trim().min(10).max(2000) }).safeParse(await req.json().catch(() => null));
+    if (!parsed.success) return NextResponse.json({ error: 'Please check your message details.' }, { status: 400 });
+    const body = parsed.data;
     const { name, email, phone, subject, message } = body;
 
     // Validation
