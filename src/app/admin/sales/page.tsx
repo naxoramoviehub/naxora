@@ -13,7 +13,11 @@ import {
 export default function SalesPage() {
   const [monthlySales, setMonthlySales] = useState<SalesData[]>([]);
   const [salesByPackage, setSalesByPackage] = useState<{ packageId: string; packageName: string; totalRevenue: number; bookingCount: number }[]>([]);
-  const [selectedYear, setSelectedYear] = useState<number>(new Date().getFullYear());
+  const [selectedYear, setSelectedYear] = useState<number>(2024);
+
+  useEffect(() => {
+    setSelectedYear(new Date().getFullYear());
+  }, []);
   const [loading, setLoading] = useState(true);
 
   const years = [2024, 2025, 2026, 2027, 2028];
