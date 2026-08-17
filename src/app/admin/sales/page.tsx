@@ -5,9 +5,9 @@ import { getMonthlySales, getSalesByPackage, SalesData } from '@/lib/database';
 import AdminLayout from '@/components/admin/AdminLayout';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
-import { 
-  Download, TrendingUp, DollarSign, Calendar, 
-  Package, BarChart3, ChevronLeft, ChevronRight 
+import {
+  Download, TrendingUp, DollarSign, Calendar,
+  Package, BarChart3, ChevronLeft, ChevronRight
 } from 'lucide-react';
 
 export default function SalesPage() {
@@ -90,8 +90,8 @@ export default function SalesPage() {
   const maxRevenue = Math.max(...monthlySales.map(s => s.totalRevenue), 1);
 
   return (
-    <AdminLayout 
-      title="Sales Analytics" 
+    <AdminLayout
+      title="Sales Analytics"
       subtitle="Track revenue, bookings, and performance metrics"
     >
       {/* Year Selector */}
@@ -103,11 +103,10 @@ export default function SalesPage() {
               <button
                 key={year}
                 onClick={() => setSelectedYear(year)}
-                className={`px-4 py-2 rounded-lg font-mono font-semibold transition-all ${
-                  selectedYear === year
+                className={`px-4 py-2 rounded-lg font-mono font-semibold transition-all ${selectedYear === year
                     ? 'bg-primary text-white shadow-lg shadow-primary/25'
                     : 'bg-surface-container text-on-surface-variant'
-                }`}
+                  }`}
               >
                 {year}
               </button>

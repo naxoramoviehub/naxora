@@ -1,10 +1,44 @@
 import Link from 'next/link';
 
+import { Facebook, Instagram, MapPin, Mail } from 'lucide-react';
+
 export default function Footer() {
   return (
     <footer className="bg-surface-container-lowest border-t border-glass-stroke pt-20 pb-10 px-5 md:px-[80px] z-10 relative">
       <div className="max-w-[1440px] mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 mb-16">
+        
+        {/* Map Location Section */}
+        <div className="mb-20 max-w-[800px] mx-auto">
+          <div className="text-center mb-8">
+            <h2 className="font-sans text-[28px] md:text-[32px] font-extrabold text-white mb-2">Visit Naxora Kandy</h2>
+            <p className="font-body text-[16px] text-on-surface-variant">
+              159/A Colombo Road, Kandy, Sri Lanka — tap the map to explore or get directions.
+            </p>
+          </div>
+          
+          <div className="w-full h-[400px] md:h-[450px] rounded-3xl overflow-hidden border border-glass-stroke mb-8 shadow-2xl relative bg-surface-container">
+            <iframe
+              src="https://maps.google.com/maps?q=NAXORA,+159/A+Colombo+Road,+Kandy&t=&z=14&ie=UTF8&iwloc=&output=embed"
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              allowFullScreen={false}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
+          
+          <div className="flex flex-col gap-4 max-w-[400px] mx-auto">
+            <a href="https://maps.app.goo.gl/fwHmwaP8cJHWU8pZA?g_st=iw" target="_blank" rel="noreferrer" className="flex items-center justify-center bg-primary text-on-primary font-bold py-4 px-6 rounded-full hover:bg-primary/90 transition-all shadow-lg active:scale-[0.98]">
+              Get Directions
+            </a>
+            <a href="https://maps.app.goo.gl/fwHmwaP8cJHWU8pZA?g_st=iw" target="_blank" rel="noreferrer" className="flex items-center justify-center border border-glass-stroke text-white font-bold py-4 px-6 rounded-full hover:bg-white/5 transition-all active:scale-[0.98]">
+              Open in Google Maps
+            </a>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 mb-16 border-t border-glass-stroke pt-16">
           {/* Logo & Intro */}
           <div className="lg:col-span-2">
             <h3 className="font-sans text-[26px] font-extrabold tracking-tighter text-white mb-4">
@@ -60,13 +94,38 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Contact */}
+          {/* Contact & Socials */}
           <div>
-            <h4 className="font-sans text-[15px] font-bold text-white uppercase tracking-wider mb-5">Plan a visit</h4>
-            <p className="font-body text-[14px] text-on-surface-variant mb-4 leading-relaxed">
-              Open daily with four reservable sessions. Contact our team for location details, accessibility needs, or custom events.
-            </p>
-            <a href="mailto:naxoramovihub@gmail.com" className="text-sm text-primary hover:underline">naxoramovihub@gmail.com</a>
+            <h4 className="font-sans text-[15px] font-bold text-white uppercase tracking-wider mb-5">Connect</h4>
+            
+            <div className="flex flex-col gap-4 mb-6">
+              <a href="https://maps.app.goo.gl/fwHmwaP8cJHWU8pZA?g_st=iw" target="_blank" rel="noreferrer" className="flex items-start gap-3 group text-on-surface-variant hover:text-white transition-colors">
+                <MapPin className="w-5 h-5 shrink-0 mt-0.5 text-primary group-hover:text-white transition-colors" />
+                <span className="font-body text-[14px] leading-relaxed">
+                  Visit Naxora Kandy Location
+                </span>
+              </a>
+              
+              <a href="mailto:naxoramovihub@gmail.com" className="flex items-center gap-3 group text-on-surface-variant hover:text-white transition-colors">
+                <Mail className="w-5 h-5 shrink-0 text-primary group-hover:text-white transition-colors" />
+                <span className="font-body text-[14px]">naxoramovihub@gmail.com</span>
+              </a>
+            </div>
+
+            {/* Social Icons */}
+            <div className="flex items-center gap-4">
+              <a href="https://instagram.com/naxora_kandy" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full border border-glass-stroke flex items-center justify-center text-on-surface-variant hover:text-white hover:border-white hover:bg-white/5 transition-all" aria-label="Instagram">
+                <Instagram className="w-4 h-4" />
+              </a>
+              <a href="https://facebook.com/naxora.kandy" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full border border-glass-stroke flex items-center justify-center text-on-surface-variant hover:text-white hover:border-white hover:bg-white/5 transition-all" aria-label="Facebook">
+                <Facebook className="w-4 h-4" />
+              </a>
+              <a href="https://tiktok.com/@naxora_kandy" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full border border-glass-stroke flex items-center justify-center text-on-surface-variant hover:text-white hover:border-white hover:bg-white/5 transition-all" aria-label="TikTok">
+                <svg fill="currentColor" viewBox="0 0 24 24" className="w-4 h-4">
+                  <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.34 2.88 2.88 0 0 1 2.31-4.52 2.66 2.66 0 0 1 1.62.53V9.5a6.05 6.05 0 0 0-1.62-.22 6.34 6.34 0 0 0-6.32 6.33 6.35 6.35 0 0 0 6.32 6.32 6.34 6.34 0 0 0 6.31-6.27v-6.3a8.2 8.2 0 0 0 3.8 1.05z" />
+                </svg>
+              </a>
+            </div>
           </div>
         </div>
 
