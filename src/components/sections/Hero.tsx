@@ -111,12 +111,12 @@ export default function Hero() {
             transition={{ duration: 0.8, delay: 0.3 }}
             className="flex flex-wrap gap-4 items-center"
           >
-            <Link href="/packages">
+            <Link href="/#packages">
               <Button size="lg" variant="primary">
                 Book Your Cabin
               </Button>
             </Link>
-            <Link href="/packages">
+            <Link href="/#packages">
               <Button size="lg" variant="secondary">
                 Explore Offerings
               </Button>

@@ -114,7 +114,7 @@ export default function AboutPage() {
               Today, we're proud to offer Sri Lanka's most comprehensive private entertainment experience, with cutting-edge technology, luxurious spaces, and a commitment to excellence that sets us apart.
             </p>
             <div className="flex justify-center">
-              <Link href="/packages">
+              <Link href="/#packages">
                 <Button size="lg">Experience NAXORA</Button>
               </Link>
             </div>

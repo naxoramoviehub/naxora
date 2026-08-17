@@ -198,7 +198,7 @@ function BookingFormContent() {
         <main className="flex-1 pt-20 flex items-center justify-center">
           <div className="text-center">
             <h1 className="font-sans text-[32px] font-bold text-white mb-4">Suite Not Found</h1>
-            <Link href="/packages">
+            <Link href="/#packages">
               <Button variant="primary">Back to Packages</Button>
             </Link>
           </div>
@@ -583,7 +583,7 @@ I have attached the screenshot of the bank transfer transaction receipt below. P
                   </div>
                 </div>
                 <div className="mt-10 flex justify-between border-t border-glass-stroke pt-6">
-                  <Link href="/packages">
+                  <Link href="/#packages">
                     <Button variant="secondary" className="flex items-center gap-2">
                       <ArrowLeft className="w-4 h-4" />
                       <span>Back to Packages</span>

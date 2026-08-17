@@ -55,7 +55,7 @@ export default function Footer() {
             <h4 className="font-sans text-[15px] font-bold text-white uppercase tracking-wider mb-5">Offerings</h4>
             <ul className="space-y-3.5">
               <li>
-                <Link href="/packages" className="font-body text-[15px] text-on-surface-variant hover:text-white transition-colors">
+                <Link href="/#packages" className="font-body text-[15px] text-on-surface-variant hover:text-white transition-colors">
                   Private Suites
                 </Link>
               </li>

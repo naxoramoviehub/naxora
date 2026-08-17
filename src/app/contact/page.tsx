@@ -239,7 +239,7 @@ export default function ContactPage() {
                 <p className="font-body text-[16px] text-on-surface-variant mb-6">
                   Ready to book a slot for cinema or gaming?
                 </p>
-                <Link href="/packages">
+                <Link href="/#packages">
                   <Button size="lg" variant="primary" className="w-full sm:w-auto">Book Your Experience</Button>
                 </Link>
               </div>
