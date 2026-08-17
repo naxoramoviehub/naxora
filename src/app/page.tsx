@@ -15,10 +15,58 @@ import {
   Sparkles, Calendar, User, Clock, Check, Tv, Volume2, Film, 
   Gamepad2, Cpu, Monitor, Trophy, Laptop, UtensilsCrossed, 
   Palette, Camera, Music, Wine, Compass 
+, MapPin, Phone, Mail, Send, CheckCircle2, AlertCircle
 } from 'lucide-react';
 
 export default function Home() {
   const router = useRouter();
+
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    subject: '',
+    message: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setError(null);
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Something went wrong. Please try again.');
+      }
+
+      setIsSubmitted(true);
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        subject: '',
+        message: ''
+      });
+    } catch (err: any) {
+      console.error(err);
+      setError(err.message || 'Failed to send message. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const [activeCategory, setActiveCategory] = useState<'all' | 'cinema' | 'gaming' | 'celebration'>('all');
   const [packages, setPackages] = useState<Package[]>([]);
   const [loading, setLoading] = useState(true);
@@ -318,9 +366,204 @@ export default function Home() {
               <Link href="#packages">
                 <Button size="lg" variant="primary">Reserve Your Experience</Button>
               </Link>
-              <Link href="/contact">
+              <Link href="/#contact">
                 <Button size="lg" variant="secondary">Contact Events Team</Button>
               </Link>
+            </div>
+          </div>
+        </section>
+      <section id="contact" className="py-20 px-5 md:px-[80px] max-w-[1440px] mx-auto">
+        <div className="text-center mb-16">
+          <Badge variant="primary" className="mb-4">Support & Bookings</Badge>
+          <h2 className="font-sans text-[36px] md:text-[50px] font-bold text-white tracking-tight">
+            Contact Us
+          </h2>
+          <p className="font-body text-[16px] text-on-surface-variant max-w-xl mx-auto mt-3 leading-relaxed">
+            Have questions about booking slots, specific packages, or custom screening requests? Our events desk is available to assist you.
+          </p>
+        </div>
+        <div className="grid md:grid-cols-2 gap-12">
+            <div>
+              <h2 className="font-sans text-[28px] md:text-[36px] font-bold text-white mb-6 tracking-tight">
+                Send us a Message
+              </h2>
+              <Card className="p-8 border border-glass-stroke">
+                {isSubmitted ? (
+                  <div className="text-center py-12 flex flex-col items-center justify-center">
+                    <CheckCircle2 className="w-16 h-16 text-primary mb-6 animate-pulse" />
+                    <h3 className="font-sans text-[24px] font-bold text-white mb-3">Message Sent!</h3>
+                    <p className="font-body text-on-surface-variant max-w-sm mb-8 leading-relaxed">
+                      Thank you for contacting NAXORA. An event coordinator will respond to your inquiry shortly via email or phone.
+                    </p>
+                    <Button variant="secondary" onClick={() => setIsSubmitted(false)}>Send Another Message</Button>
+                  </div>
+                ) : (
+                  <form onSubmit={handleSubmit}>
+                    <div className="space-y-6">
+                      {error && (
+                        <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-xl flex items-center gap-3 text-sm">
+                          <AlertCircle className="w-5 h-5 shrink-0" />
+                          <span>{error}</span>
+                        </div>
+                      )}
+                      <div>
+                        <label className="block font-sans text-[14px] font-bold text-white mb-2 uppercase tracking-wide">
+                          Full Name
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          placeholder="John Doe"
+                          className="w-full px-4 py-3 bg-background border border-glass-stroke rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/60 transition-all placeholder:text-muted/60"
+                          value={formData.name}
+                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        />
+                      </div>
+                      <div>
+                        <label className="block font-sans text-[14px] font-bold text-white mb-2 uppercase tracking-wide">
+                          Email Address
+                        </label>
+                        <input
+                          type="email"
+                          required
+                          placeholder="johndoe@example.com"
+                          className="w-full px-4 py-3 bg-background border border-glass-stroke rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/60 transition-all placeholder:text-muted/60"
+                          value={formData.email}
+                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        />
+                      </div>
+                      <div>
+                        <label className="block font-sans text-[14px] font-bold text-white mb-2 uppercase tracking-wide">
+                          Phone Number
+                        </label>
+                        <input
+                          type="tel"
+                          placeholder="+94 7X XXX XXXX"
+                          className="w-full px-4 py-3 bg-background border border-glass-stroke rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/60 transition-all placeholder:text-muted/60"
+                          value={formData.phone}
+                          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                        />
+                      </div>
+                      <div>
+                        <label className="block font-sans text-[14px] font-bold text-white mb-2 uppercase tracking-wide">
+                          Subject
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          placeholder="Custom Event Setup Inquiry"
+                          className="w-full px-4 py-3 bg-background border border-glass-stroke rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/60 transition-all placeholder:text-muted/60"
+                          value={formData.subject}
+                          onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                        />
+                      </div>
+                      <div>
+                        <label className="block font-sans text-[14px] font-bold text-white mb-2 uppercase tracking-wide">
+                          Message
+                        </label>
+                        <textarea
+                          required
+                          placeholder="Describe your event or questions here..."
+                          className="w-full px-4 py-3 bg-background border border-glass-stroke rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/60 transition-all h-32 placeholder:text-muted/60 resize-none"
+                          value={formData.message}
+                          onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                        />
+                      </div>
+                      <Button type="submit" size="lg" variant="primary" className="w-full flex items-center justify-center gap-2" disabled={isSubmitting}>
+                        {isSubmitting ? 'Sending...' : (
+                          <>
+                            <span>Send Message</span>
+                            <Send className="w-4 h-4" />
+                          </>
+                        )}
+                      </Button>
+                    </div>
+                  </form>
+                )}
+              </Card>
+            </div>
+ 
+            <div>
+              <h2 className="font-sans text-[28px] md:text-[36px] font-bold text-white mb-6 tracking-tight">
+                Contact Details
+              </h2>
+              <div className="space-y-6">
+                <Card glowColor="purple" className="p-6 flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shrink-0">
+                    <MapPin className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="font-sans text-[18px] font-bold text-white mb-1">Our Location</h3>
+                    <p className="font-body text-[15px] text-on-surface-variant">
+                      159/A Colombo Road, Kandy, Sri Lanka
+                    </p>
+                    <div className="w-full h-[150px] mt-4 rounded-xl overflow-hidden border border-glass-stroke relative bg-surface-container">
+                      <iframe
+                        src="https://maps.google.com/maps?q=NAXORA,+159/A+Colombo+Road,+Kandy&t=&z=14&ie=UTF8&iwloc=&output=embed"
+                        width="100%"
+                        height="100%"
+                        style={{ border: 0 }}
+                        allowFullScreen={false}
+                        loading="lazy"
+                        referrerPolicy="no-referrer-when-downgrade"
+                      ></iframe>
+                    </div>
+                    <div className="flex flex-col sm:flex-row gap-3 mt-5">
+                      <a href="https://maps.app.goo.gl/fwHmwaP8cJHWU8pZA?g_st=iw" target="_blank" rel="noreferrer" className="flex-1 flex items-center justify-center bg-primary text-on-primary font-bold py-2.5 px-4 rounded-xl hover:bg-primary/90 transition-all text-sm shadow-md active:scale-[0.98]">
+                        Get Directions
+                      </a>
+                      <a href="https://maps.app.goo.gl/fwHmwaP8cJHWU8pZA?g_st=iw" target="_blank" rel="noreferrer" className="flex-1 flex items-center justify-center border border-glass-stroke text-white font-bold py-2.5 px-4 rounded-xl hover:bg-white/5 transition-all text-sm active:scale-[0.98]">
+                        Open in Google Maps
+                      </a>
+                    </div>
+                  </div>
+                </Card>
+ 
+                <Card glowColor="cyan" className="p-6 flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-lg bg-tertiary/10 border border-tertiary/20 flex items-center justify-center text-tertiary shrink-0">
+                    <Phone className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="font-sans text-[18px] font-bold text-white mb-1">Phone Helpline</h3>
+                    <p className="font-body text-[15px] text-on-surface-variant">
+                      <a href="https://wa.me/94707735599" target="_blank" rel="noopener noreferrer" className="hover:text-tertiary transition-colors">+94 70 773 5599 (WhatsApp)</a>
+                    </p>
+                  </div>
+                </Card>
+ 
+                <Card glowColor="purple" className="p-6 flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shrink-0">
+                    <Mail className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="font-sans text-[18px] font-bold text-white mb-1">Email Support</h3>
+                    <p className="font-body text-[15px] text-on-surface-variant">
+                      <a href="mailto:naxoramovihub@gmail.com" className="hover:text-primary transition-colors">naxoramovihub@gmail.com</a>
+                    </p>
+                  </div>
+                </Card>
+ 
+                <Card glowColor="cyan" className="p-6 flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-lg bg-tertiary/10 border border-tertiary/20 flex items-center justify-center text-tertiary shrink-0">
+                    <Clock className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="font-sans text-[18px] font-bold text-white mb-1">Operational Hours</h3>
+                    <p className="font-body text-[15px] text-on-surface-variant">
+                      Open daily: 10:00 AM - 11:30 PM
+                    </p>
+                  </div>
+                </Card>
+              </div>
+ 
+              <div className="mt-12 text-center p-8 bg-surface-container/20 border border-glass-stroke rounded-2xl">
+                <p className="font-body text-[16px] text-on-surface-variant mb-6">
+                  Ready to book a slot for cinema or gaming?
+                </p>
+                <Link href="/#packages">
+                  <Button size="lg" variant="primary" className="w-full sm:w-auto">Book Your Experience</Button>
+                </Link>
+              </div>
             </div>
           </div>
         </section>

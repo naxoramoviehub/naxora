@@ -7,36 +7,7 @@ export default function Footer() {
     <footer className="bg-surface-container-lowest border-t border-glass-stroke pt-20 pb-10 px-5 md:px-[80px] z-10 relative">
       <div className="max-w-[1440px] mx-auto">
         
-        {/* Map Location Section */}
-        <div className="mb-20 max-w-[800px] mx-auto">
-          <div className="text-center mb-8">
-            <h2 className="font-sans text-[28px] md:text-[32px] font-extrabold text-white mb-2">Visit Naxora Kandy</h2>
-            <p className="font-body text-[16px] text-on-surface-variant">
-              159/A Colombo Road, Kandy, Sri Lanka — tap the map to explore or get directions.
-            </p>
-          </div>
-          
-          <div className="w-full h-[400px] md:h-[450px] rounded-3xl overflow-hidden border border-glass-stroke mb-8 shadow-2xl relative bg-surface-container">
-            <iframe
-              src="https://maps.google.com/maps?q=NAXORA,+159/A+Colombo+Road,+Kandy&t=&z=14&ie=UTF8&iwloc=&output=embed"
-              width="100%"
-              height="100%"
-              style={{ border: 0 }}
-              allowFullScreen={false}
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            ></iframe>
-          </div>
-          
-          <div className="flex flex-col gap-4 max-w-[400px] mx-auto">
-            <a href="https://maps.app.goo.gl/fwHmwaP8cJHWU8pZA?g_st=iw" target="_blank" rel="noreferrer" className="flex items-center justify-center bg-primary text-on-primary font-bold py-4 px-6 rounded-full hover:bg-primary/90 transition-all shadow-lg active:scale-[0.98]">
-              Get Directions
-            </a>
-            <a href="https://maps.app.goo.gl/fwHmwaP8cJHWU8pZA?g_st=iw" target="_blank" rel="noreferrer" className="flex items-center justify-center border border-glass-stroke text-white font-bold py-4 px-6 rounded-full hover:bg-white/5 transition-all active:scale-[0.98]">
-              Open in Google Maps
-            </a>
-          </div>
-        </div>
+        {/* Map Location Section Removed */}
 
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 mb-16 border-t border-glass-stroke pt-16">
           {/* Logo & Intro */}
@@ -82,7 +53,7 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="font-body text-[15px] text-on-surface-variant hover:text-white transition-colors">
+                <Link href="/#contact" className="font-body text-[15px] text-on-surface-variant hover:text-white transition-colors">
                   Contact Us
                 </Link>
               </li>
