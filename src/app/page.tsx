@@ -178,6 +178,109 @@ export default function Home() {
         {/* Hero Section */}
         <Hero />
 
+        {/* About Section */}
+        <div id="about" className="border-t border-glass-stroke mt-10">
+          <div className="text-center pt-20 pb-4">
+            <Badge variant="primary" className="mb-4">About Us</Badge>
+            <h2 className="font-sans text-[36px] md:text-[50px] font-bold text-white tracking-tight">
+              Welcome to NAXORA
+            </h2>
+          </div>
+          {/* Mission Section */}
+        <section className="py-[120px] px-[20px] md:px-[80px] max-w-[1440px] mx-auto">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <h2 className="font-sans text-[32px] md:text-[48px] font-bold text-on-surface mb-6">
+                Our Mission
+              </h2>
+              <p className="font-body text-[18px] text-on-surface-variant mb-6 leading-relaxed">
+                At NAXORA, we believe entertainment should be an experience, not just an activity. Our mission is to provide exclusive, private entertainment spaces where you can escape the ordinary and immerse yourself in luxury.
+              </p>
+              <p className="font-body text-[18px] text-on-surface-variant mb-8 leading-relaxed">
+                Whether you're watching the latest blockbuster on our 4K projectors, competing in intense gaming sessions, or celebrating special moments with friends and family, we ensure every detail is perfect.
+              </p>
+            </div>
+            <Card glowColor="purple" className="p-8">
+              <div className="space-y-6">
+                <div className="text-center">
+                  <div className="font-sans text-[48px] font-bold text-primary mb-2">4K</div>
+                  <div className="font-body text-[16px] text-on-surface-variant">Ultra HD Projection</div>
+                </div>
+                <div className="text-center">
+                  <div className="font-sans text-[48px] font-bold text-secondary mb-2">7.1</div>
+                  <div className="font-body text-[16px] text-on-surface-variant">Surround Sound</div>
+                </div>
+                <div className="text-center">
+                  <div className="font-sans text-[48px] font-bold text-tertiary mb-2">24/7</div>
+                  <div className="font-body text-[16px] text-on-surface-variant">Premium Service</div>
+                </div>
+              </div>
+            </Card>
+          </div>
+        </section>
+
+        {/* Values Section */}
+        <section className="py-[120px] px-[20px] md:px-[80px] bg-surface-container/30">
+          <div className="max-w-[1440px] mx-auto">
+            <div className="text-center mb-16">
+              <h2 className="font-sans text-[32px] md:text-[48px] font-bold text-on-surface mb-4">
+                Our Values
+              </h2>
+              <p className="font-body text-[18px] text-on-surface-variant max-w-2xl mx-auto">
+                The principles that guide everything we do at NAXORA.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-8">
+              <Card glowColor="purple" className="p-8 text-center">
+                <div className="text-4xl mb-4">✨</div>
+                <h3 className="font-sans text-[24px] font-bold text-on-surface mb-3">Excellence</h3>
+                <p className="font-body text-[16px] text-on-surface-variant">
+                  We strive for perfection in every aspect, from our state-of-the-art equipment to our attentive service.
+                </p>
+              </Card>
+
+              <Card glowColor="cyan" className="p-8 text-center">
+                <div className="text-4xl mb-4">🔒</div>
+                <h3 className="font-sans text-[24px] font-bold text-on-surface mb-3">Privacy</h3>
+                <p className="font-body text-[16px] text-on-surface-variant">
+                  Your private space is sacred. We ensure complete privacy and exclusivity for all our guests.
+                </p>
+              </Card>
+
+              <Card glowColor="purple" className="p-8 text-center">
+                <div className="text-4xl mb-4">🎯</div>
+                <h3 className="font-sans text-[24px] font-bold text-on-surface mb-3">Innovation</h3>
+                <p className="font-body text-[16px] text-on-surface-variant">
+                  We continuously upgrade our technology and experiences to stay at the forefront of entertainment.
+                </p>
+              </Card>
+            </div>
+          </div>
+        </section>
+
+        {/* Story Section */}
+        <section className="py-[120px] px-[20px] md:px-[80px] max-w-[1440px] mx-auto">
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="font-sans text-[32px] md:text-[48px] font-bold text-on-surface mb-6">
+              Our Story
+            </h2>
+            <p className="font-body text-[18px] text-on-surface-variant mb-8 leading-relaxed">
+              NAXORA was born from a simple idea: entertainment should be personal, private, and premium. Frustrated by crowded cinemas and noisy gaming cafes, we set out to create something different – a space where you control the experience.
+            </p>
+            <p className="font-body text-[18px] text-on-surface-variant mb-8 leading-relaxed">
+              Today, we're proud to offer Sri Lanka's most comprehensive private entertainment experience, with cutting-edge technology, luxurious spaces, and a commitment to excellence that sets us apart.
+            </p>
+            <div className="flex justify-center">
+              <Link href="/#packages">
+                <Button size="lg">Experience NAXORA</Button>
+              </Link>
+            </div>
+          </div>
+        </section>
+        </div>
+
+        {/* Why choose NAXORA */}
         <section aria-label="Why choose NAXORA" className="relative z-10 border-y border-glass-stroke bg-surface-container-lowest/50 px-5 py-10 md:px-20">
           <div className="mx-auto grid max-w-[1200px] gap-6 text-center sm:grid-cols-2 lg:grid-cols-4">
             {[['Private by design','Sound-conscious cabins reserved only for your group.'],['Clear pricing','Upfront package pricing with no surprise booking fees.'],['Flexible occasions','Movie nights, gaming sessions and milestone celebrations.'],['Human support','Coordinate details directly with our team on WhatsApp.']].map(([title,copy]) => <div key={title}><h2 className="mb-2 font-sans text-lg font-bold text-white">{title}</h2><p className="text-sm leading-relaxed text-on-surface-variant">{copy}</p></div>)}
@@ -372,7 +475,9 @@ export default function Home() {
             </div>
           </div>
         </section>
-      <section id="contact" className="py-20 px-5 md:px-[80px] max-w-[1440px] mx-auto">
+
+        {/* Contact Section */}
+        <section id="contact" className="py-20 px-5 md:px-[80px] max-w-[1440px] mx-auto">
         <div className="text-center mb-16">
           <Badge variant="primary" className="mb-4">Support & Bookings</Badge>
           <h2 className="font-sans text-[36px] md:text-[50px] font-bold text-white tracking-tight">
@@ -556,15 +661,7 @@ export default function Home() {
                 </Card>
               </div>
  
-              <div className="mt-12 text-center p-8 bg-surface-container/20 border border-glass-stroke rounded-2xl">
-                <p className="font-body text-[16px] text-on-surface-variant mb-6">
-                  Ready to book a slot for cinema or gaming?
-                </p>
-                <Link href="/#packages">
-                  <Button size="lg" variant="primary" className="w-full sm:w-auto">Book Your Experience</Button>
-                </Link>
               </div>
-            </div>
           </div>
         </section>
       </main>
